@@ -4,9 +4,10 @@ This is a new submission: deaviz 0.1.0.
 
 ## R CMD check results
 
-On win-builder (R-devel and R-release) and R-hub: 0 errors | 0 warnings | 1 note.
+On win-builder (R-devel and R-release): 0 errors | 0 warnings | 1 note.
 
-The note is the standard "New submission" note for a first-time package.
+This is a new submission, so the "New submission" note is expected. The flagged
+words (Costa, Porembski, Sammon) are author surnames and are spelled correctly.
 
 Two further items can appear in a local `R CMD check --as-cran` but are
 environmental rather than package issues, and do not occur on CRAN's check
