@@ -14,7 +14,7 @@ Description: High-dimensional visualization methods for data envelopment
     reference networks, and a set of descriptive plots. The
     package is built around a single validated 'dea_data' object and uses the
     'Benchmarking' package as its DEA engine.
-License: GPL-3
+License: AGPL-3
 Encoding: UTF-8
 Language: en-GB
 URL: https://github.com/pomelo64/deaviz
