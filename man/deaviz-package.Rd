@@ -54,17 +54,17 @@ Data Envelopment Analysis}.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/YOUR-GH-ACCOUNT/deaviz}
-  \item Report bugs at \url{https://github.com/YOUR-GH-ACCOUNT/deaviz/issues}
+  \item \url{https://github.com/pomelo64/deaviz}
+  \item Report bugs at \url{https://github.com/pomelo64/deaviz/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Shahin Ashkiani \email{REPLACE_ME@example.com}
+\strong{Maintainer}: Shahin Ashkiani \email{Contact@Shahin-Ashkiani.com}
 
 Authors:
 \itemize{
-  \item Shahin Ashkiani \email{REPLACE_ME@example.com}
+  \item Shahin Ashkiani \email{Contact@Shahin-Ashkiani.com}
 }
 
 }

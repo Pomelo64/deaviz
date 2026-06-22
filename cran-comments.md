@@ -20,11 +20,11 @@ machines:
   (the vignette is HTML and the package is built with --no-manual), and qpdf is
   available on CRAN's machines.
 
-## Test environments
 
-* Local: Pop!_OS 24.04 LTS, R 4.3.3 (0 errors; the two environmental items above)
+## Test environments
+* Local: Pop!_OS 24.04 LTS, R 4.3.3
 * win-builder: R-devel and R-release
-* R-hub: Windows, macOS, Linux
+* GitHub Actions: Windows, macOS, Ubuntu (R-release and R-oldrel)
 
 ## Examples and Suggests
 
