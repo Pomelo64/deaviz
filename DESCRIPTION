@@ -1,0 +1,48 @@
+Package: deaviz
+Type: Package
+Title: Visualization of Data Envelopment Analysis Problems
+Version: 0.1.0
+Authors@R: person("Shahin", "Ashkiani", role = c("aut", "cre"),
+                  email = "Contact@Shahin-Ashkiani.com")
+Description: High-dimensional visualization methods for data envelopment
+    analysis (DEA), gathering in one place techniques that have appeared in the
+    literature but remained scattered and largely unimplemented: cross-efficiency
+    matrix unfolding, the Porembski reference-set graph (Sammon mapping with
+    links), principal component analysis biplots, multidimensional-scaling
+    colour-plots, self-organizing maps, the Costa bi-dimensional efficient
+    frontier, parallel coordinates, radar charts, panel-data trajectory biplots, peer and
+    reference networks, and a set of descriptive plots. The
+    package is built around a single validated 'dea_data' object and uses the
+    'Benchmarking' package as its DEA engine.
+License: GPL-3
+Encoding: UTF-8
+Language: en-GB
+URL: https://github.com/pomelo64/deaviz
+BugReports: https://github.com/pomelo64/deaviz/issues
+LazyData: true
+Depends:
+    R (>= 3.6.0)
+Imports:
+    rlang,
+    stats,
+    utils,
+    grDevices,
+    graphics,
+    ggplot2 (>= 3.4.0)
+Suggests:
+    Benchmarking,
+    lpSolve,
+    lpSolveAPI,
+    kohonen,
+    smacof,
+    plotly,
+    ggrepel,
+    igraph,
+    graphlayouts,
+    MASS,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Roxygen: list(markdown = FALSE)
+VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0

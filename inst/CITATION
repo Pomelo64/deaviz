@@ -1,0 +1,20 @@
+citHeader("To cite deaviz in publications, please cite the thesis that introduces the methods:")
+
+bibentry(
+  bibtype = "PhdThesis",
+  title   = "Four Essays on Data Visualization and Anomaly Detection of Data Envelopment Analysis Problems",
+  author  = person("Shahin", "Ashkiani"),
+  school  = "Universitat Aut\u00f2noma de Barcelona",
+  address = "Barcelona, Spain",
+  year    = "2019",
+  url     = "https://ddd.uab.cat/record/240333"
+)
+
+bibentry(
+  bibtype = "Manual",
+  title   = "deaviz: Visualization of Data Envelopment Analysis Problems",
+  author  = person("Shahin", "Ashkiani"),
+  year    = "2026",
+  note    = "R package version 0.1.0",
+  url     = "https://ddd.uab.cat/record/240333"
+)

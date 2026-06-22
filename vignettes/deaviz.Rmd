@@ -1,0 +1,367 @@
+---
+title: "Getting started with deaviz"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with deaviz}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+#devtools::load_all()
+
+has_bench   <- requireNamespace("Benchmarking",  quietly = TRUE)
+has_smacof  <- requireNamespace("smacof",        quietly = TRUE)
+has_igraph  <- requireNamespace("igraph",        quietly = TRUE) &&
+               requireNamespace("graphlayouts",  quietly = TRUE)
+has_kohonen <- requireNamespace("kohonen",       quietly = TRUE)
+
+knitr::opts_chunk$set(
+  collapse   = TRUE,
+  comment    = "#>",
+  fig.width  = 7,
+  fig.height = 4.8,
+  fig.align  = "center",
+  dpi        = 96,
+  out.width  = "85%"
+)
+```
+
+
+`deaviz` turns the numbers behind a Data Envelopment Analysis (DEA), whether they are input/output profiles or the computational outcomes of various DEA models, into plots of efficiency distributions, input/output relationships, efficient frontier representations, projection biplots, benchmarking networks, cross-efficiency maps, and multi-period trajectories for panel data. This vignette walks through a typical workflow using two bundled datasets.
+
+The workflow has three steps that map onto the package's naming convention:
+
+1. wrap your data in a **`dea_data()`** object (inputs, outputs, DMU labels);
+2. **`compute_*()`** the quantities you need (efficiency, cross-efficiency,
+   weights, self-organising maps);
+3. **`plot_*()`** the result.
+
+```{r load}
+library(deaviz)
+```
+
+Most plots compute efficiency scores internally, which relies on the **`Benchmarking`**
+package; a few embeddings/layouts use `smacof`, `igraph`/`graphlayouts`, or
+`kohonen`. These are all *Suggests*: install them to reproduce every figure
+below. (Where a suggested package is missing, the corresponding chunk is simply
+skipped, so this vignette always builds.)
+
+## The data object
+
+`deaviz` ships with `chinese_cities`, a classic cross-sectional DEA benchmark of 35
+cities with three inputs and three outputs (Sueyoshi, 1992). `dea_data()`
+records which columns
+are inputs, which are outputs, and which identifies the DMU. Columns can be
+given by name or by position.
+
+
+
+So, the `dea_data` object can be defined either by the input and output variable names: 
+
+```{r dea-data}
+d <- dea_data(
+  chinese_cities,
+  inputs  = c("industrial_labour_force", "working_funds", "investments"),
+  outputs = c("gross_industrial_output", "profit_and_tax", "retail_sales"),
+  id      = "DMU"
+)
+d
+```
+
+or equivalently by the location of them: 
+
+```{r dea-data-by-position, eval = FALSE}
+d <- dea_data(
+  chinese_cities,
+  inputs  = 2:4,
+  outputs = 5:7,
+  id      = "DMU"
+)
+
+```
+
+
+Every downstream function accepts this `d` object. If your input/output columns are
+prefixed `i_` / `o_`, `dea_data()` will detect them automatically, allowing you to omit the `inputs` and `outputs` arguments.
+
+
+## Efficiency scores
+
+The `compute_efficiency()` function returns radial efficiency scores, along with peer and multiplier weights. Returns-to-scale (RTS) and orientation can be specified as arguments.
+
+```{r efficiency, eval = has_bench}
+eff <- compute_efficiency(x = d, rts = "vrs", orientation = "in")
+head(round(eff$eff, 3))
+```
+
+## Distributions: the shape of efficiency
+
+Start by looking at the distributions' spread. `plot_efficiency_distributions()` shows the
+distribution of efficiency scores, while `plot_io_distributions()` shows the raw
+input/output variables.
+
+```{r dist, eval = has_bench}
+plot_efficiency_distributions(d, rts = "vrs", title = "Chinese Cities Efficiency Scores", subtitle = "Variable Return To Scale")
+```
+
+```{r io-dist, eval = has_bench, fig.height = 5.2}
+plot_io_distributions(d, type = "box", x_angle = 30)
+```
+
+
+Note the use of `x_angle = 30`: because the input and output names are long, tilting the x-axis tick labels keeps them readable. Every plot that displays variable or DMU names on the x-axis accepts the `x_angle` argument.
+
+
+The  `plot_io_efficients()` function compares the number of efficient versus inefficient DMUs.
+
+```{r efficients, eval = has_bench, fig.height = 3.6}
+plot_io_efficients(d, rts = "vrs", transparency = 1)
+```
+
+## Input/output relationships and the frontier
+
+
+`plot_io_scatter()` lays out every input-against-output pair if no vector of inputs and/or outputs is assigned to `vars`. If a vector is provided, then the scatterplots will be limited to the pairwise combinations of those variables. Regardless, the visual marks are colored by efficiency.
+
+
+```{r scatter, eval = has_bench, fig.height = 6}
+
+plot_io_scatter(d, vars = c("industrial_labour_force", "gross_industrial_output", "retail_sales") , color = "vrs")
+```
+
+It is possible to plot scatterplots against the efficiency scores of the DMUs as well:
+
+```{r scatter-efficiency, eval = has_bench, fig.height = 6}
+
+plot_io_scatter(d, vars = c("industrial_labour_force", "gross_industrial_output", "retail_sales"), efficiency = "vrs" , color = "vrs")
+```
+
+## Frontier Visualization
+
+
+The only frontier visualization plot available is via `plot_io_costa_frontier()`, which collapses all inputs and outputs onto a single aggregated frontier (Bana e Costa et al., 2016).
+
+
+
+```{r costa, eval = has_bench}
+plot_io_costa_frontier(d)
+```
+
+## Projection biplots
+
+
+The package offers two ways to project the multidimensional input/output space onto a readable plane. First,  `plot_io_pca_biplot()` uses Principal Component Analysis (PCA) to draw the input/output loading vectors. Second, `plot_io_mds()` uses metric (ratio) multidimensional scaling via the **smacof** majorization algorithm (de Leeuw & Mair, 2009). The graphical application of these projections to DEA follows Adler & Raveh (2008).
+
+
+Let's have a look at the PCA biplot: 
+
+```{r pca, eval = has_bench}
+plot_io_pca_biplot(d, rts = "vrs")
+```
+
+The vectors are the dataset's inputs and outputs, and they show the direction in which the value of the corresponding input or output increases in the 2D space.
+
+In contrast, we can use an MDS algorithm to reduce the dimensionality of the dataset and represent the DMUs visually in a 2D plot.
+
+```{r mds, eval = has_bench && has_smacof}
+plot_io_mds(d)
+```
+
+What to do with overcrowded plots? One solution offered by the `deaviz` package is to make the plot interactive so that you can zoom in and hover over the visual marks to get information about them.
+
+```{r mds-interactive, eval = FALSE}
+plot_io_mds(d, interactive = TRUE)
+```
+
+## Benchmarking networks
+
+
+
+For inefficient DMUs, DEA identifies the efficient peers they are benchmarked against. `plot_io_lambda_network()` draws those peer relationships weighted by the envelopment ($\lambda$) weights, laid out with Sammon mapping (Sammon, 1969) as in Porembski et al. (2005). Meanwhile, `plot_io_peer_network()`lays out who is a peer to whom; therefore, the edges are directed from the inefficient units to their targets.
+
+
+```{r lambda, eval = has_bench}
+plot_io_lambda_network(d, rts = "vrs")
+```
+
+```{r peer, eval = has_bench && has_igraph}
+plot_io_peer_network(d, rts = "vrs")
+```
+
+It is sometimes important in the networks to focus on and highlight a specific DMU and `deaviz` package addresses that need via the `labels =` argument: 
+
+```{r peer-label, eval = has_bench && has_igraph}
+plot_io_peer_network(d,layout = "fr",labels = "Xian", rts = "vrs")
+```
+
+
+It is sometimes important to highlight and focus on a specific DMU within a network. The `deaviz` package addresses this need via the `labels` argument:
+
+## Cross-efficiency
+
+
+Cross-efficiency scores every DMU using every other DMU's optimal weights (Doyle & Green, 1994). `compute_cross_efficiency()` builds the matrix, which `plot_cem_heatmap()` displays. `plot_cem_unfolding()` unfolds the same matrix into a map of who rates whom favorably (Ashkiani & Mar-Molinero, 2017), and `plot_cem_weights_heatmap()` shows the underlying weight profiles.
+
+```{r cem, eval = has_bench, fig.height = 6}
+cem <- compute_cross_efficiency(d)
+
+plot_cem_heatmap(cem, x_angle = 90)
+```
+
+```{r cem-unfold, eval = has_bench && has_smacof}
+plot_cem_unfolding(cem)
+```
+
+```{r cem-weights, eval = has_bench, fig.height = 6}
+plot_cem_weights_heatmap(d, x_angle = 30)
+```
+
+
+What if you want to highlight a specific DMU? Just as before, you can use the `labels` argument:
+
+```{r cem-weights-focus, eval = has_bench, fig.height = 6}
+plot_cem_weights_heatmap(d, x_angle = 30, labels = "Xian")
+```
+
+## Profile plots
+
+`plot_io_radar()` and `plot_io_parcoo()` show each DMU's full input/output
+profile as a radar polygon or a parallel-coordinates line.
+
+```{r radar, eval = has_bench, fig.width = 6.5, fig.height = 5.5}
+plot_io_radar(d, efficiency = "vrs")
+```
+
+```{r parcoo, eval = has_bench, fig.height = 4.2}
+plot_io_parcoo(d, efficiency = "vrs", x_angle = 30)
+```
+
+## Highlighting a single DMU: the focus view
+
+
+This feature is powerful enough to warrant its own section to explain it in greater detail. When you pass a single DMU name to the `labels` argument, `deaviz` puts it center stage: the target DMU is ringed and highlighted with a label, while all other units fade into the background. In network plots, the focus restricts the view to the chosen DMU's immediate sub-network; in panel biplots, it isolates that specific DMU's trajectory.
+
+```{r focus, eval = has_bench}
+plot_io_pca_biplot(d, rts = "vrs", labels = "Beijing")
+```
+
+
+The amount of fade is tunable through the `fade` argument: `TRUE` (default) uses a sensible level, `FALSE`  turns it off, and a number sets the alpha of the faded marks directly (a larger number keeps them more visible).
+
+
+```{r focus-level, eval = has_bench}
+plot_io_parcoo(d, efficiency = "vrs", labels = "Beijing", fade = 0.4)
+```
+
+Other `labels` modes are `"all"` (label everyone), `"id"` (number each marker),
+and `"max.overlaps"` (label as many as fit without collision).
+
+```{r cem-unfold-id, eval = has_bench && has_smacof}
+plot_cem_unfolding(cem, labels = "id")
+```
+
+## Self-organising maps
+
+`compute_som()` trains a self-organising map (Kohonen, 2001) on the
+input/output profiles, via the **kohonen** package (Wehrens & Kruisselbrink,
+2018); `plot_io_som()` colours the map by mean efficiency per node.
+
+```{r som, eval = has_bench && has_kohonen, fig.height = 5}
+som <- compute_som(d)
+plot_io_som(som)
+```
+
+## Multi-period data: trajectories
+
+
+For panel data, `plot_panel_io_biplot()` projects every DMU-period combination onto a shared PCA biplot and connects each DMU's data points to form a trajectory over time. The bundled `taiwanese_banks` dataset provides a balanced panel of 22 commercial banks from 2009 to 2011 (Kao & Liu, 2014). This dataset serves as a reproducible benchmark to demonstrate the package's panel functionality, regardless of the underlying input and output specifications. We can visualize these trajectories using the `deaviz` panel biplot while retaining all DMU identifiers on the plot:
+
+```{r panel-id, eval = has_bench, fig.width = 7.5, fig.height = 5.5}
+plot_panel_io_biplot(
+  taiwanese_banks, id = "DMU", period = "Year",
+  inputs = 3:5, outputs = 6:8, labels = "id"
+)
+```
+
+
+The trajectories, the paths that the DMUs have traversed based on their input/output profiles, are presented via the segmented vectors that connect each DMU's position over the periods.
+
+You might want to draw attention to one specific DMU. For instance, here the focus view keeps only Cathay's three-year path lit while the other banks recede, and the loading vectors are spread apart so their labels stay legible.
+
+```{r panel-Cathay, eval = has_bench, fig.width = 7.5, fig.height = 5.5}
+plot_panel_io_biplot(
+  taiwanese_banks, id = "DMU", period = "Year",
+  inputs = 3:5, outputs = 6:8, labels = "Cathay", fade = 0.25
+)
+```
+
+It is worth noting that the PCA is computed on the pooled data.
+
+## Interactive plots
+
+
+Many plots accept the `interactive = TRUE` argument, which returns a `plotly` widget with hover tooltips instead of a static `ggplot` object. This feature requires the `plotly` package and is best viewed within an HTML context:
+
+```{r interactive, eval = FALSE}
+plot_io_pca_biplot(d, rts = "vrs", labels = "Beijing", interactive = TRUE)
+```
+
+## References
+
+Adler, N., & Raveh, A. (2008). Presenting DEA graphically. *Omega*, 36(5),
+715--729.
+
+Ashkiani, S. (2019). *Four Essays on Data Visualization and Anomaly Detection of
+Data Envelopment Analysis Problems* (PhD thesis). Universitat Autonoma de
+Barcelona. <https://ddd.uab.cat/record/240333>
+
+Ashkiani, S., & Mar-Molinero, C. (2017). Visualization of cross-efficiency
+matrices using multidimensional unfolding. In *Recent Applications of Data
+Envelopment Analysis*.
+
+Bana e Costa, C. A., Soares de Mello, J. C. C. B., & Angulo Meza, L. (2016). A
+new approach to the bi-dimensional representation of the DEA efficient frontier
+with multiple inputs and outputs. *European Journal of Operational Research*,
+255(1), 175--186. <https://doi.org/10.1016/j.ejor.2016.05.012>
+
+Charnes, A., Cooper, W. W., & Rhodes, E. (1978). Measuring the efficiency of
+decision making units. *European Journal of Operational Research*, 2(6),
+429--444. <https://doi.org/10.1016/0377-2217(78)90138-8>
+
+de Leeuw, J., & Mair, P. (2009). Multidimensional scaling using majorization:
+SMACOF in R. *Journal of Statistical Software*, 31(3), 1--30.
+<https://doi.org/10.18637/jss.v031.i03>
+
+Doyle, J., & Green, R. (1994). Efficiency and cross-efficiency in DEA:
+Derivations, meanings and uses. *Journal of the Operational Research Society*,
+45(5), 567--578. <https://doi.org/10.1057/jors.1994.84>
+
+Kao, C., & Liu, S.-T. (2014). Multi-period efficiency measurement in data
+envelopment analysis: The case of Taiwanese commercial banks. *Omega*, 47,
+90--98. <https://doi.org/10.1016/j.omega.2013.09.001>
+
+Kohonen, T. (2001). *Self-Organizing Maps* (3rd ed.). Springer.
+
+Porembski, M., Breitenstein, K., & Alpar, P. (2005). Visualizing efficiency and
+reference relations in data envelopment analysis with an application to the
+branches of a German bank. *Journal of Productivity Analysis*, 23(2), 203--221.
+<https://doi.org/10.1007/s11123-005-1328-5>
+
+Sammon, J. W. (1969). A nonlinear mapping for data structure analysis. *IEEE
+Transactions on Computers*, C-18(5), 401--409.
+<https://doi.org/10.1109/T-C.1969.222678>
+
+Sueyoshi, T. (1992). Measuring the industrial performance of Chinese cities by
+data envelopment analysis. *Socio-Economic Planning Sciences*, 26(2), 75--88.
+<https://doi.org/10.1016/0038-0121(92)90015-W>
+
+Wehrens, R., & Kruisselbrink, J. (2018). Flexible self-organizing maps in
+kohonen 3.0. *Journal of Statistical Software*, 87(7), 1--18.
+<https://doi.org/10.18637/jss.v087.i07>
+
+## Where to next
+
+Every function has its own help page with a full argument list and examples
+(e.g. `?plot_panel_io_biplot`). To cite the package, see
+`citation("deaviz")`.
