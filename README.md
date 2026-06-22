@@ -116,4 +116,4 @@ See `citation("deaviz")` for the BibTeX entry.
 
 ## License
 
-GPL-3.
+AGPL-3.
