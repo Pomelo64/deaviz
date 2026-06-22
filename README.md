@@ -114,6 +114,10 @@ If you use this package, please cite the thesis it is based on:
 
 See `citation("deaviz")` for the BibTeX entry.
 
+##  Development Note
+
+This package implements my DEA-Viz methods. An AI coding assistant (Claude, Anthropic) was used to help implement and refine the R code from my specifications and prototype functions; I designed the methods, and reviewed, tested, and validated all code, taking full responsibility for the software.
+
 ## License
 
 AGPL-3.
