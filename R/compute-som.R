@@ -45,29 +45,20 @@ compute_som <- function(x, rts = c("crs", "vrs"), xdim = 8, ydim = 8,
     stop("`seed` must be a single number or NULL.", call. = FALSE)
   if (!requireNamespace("kohonen", quietly = TRUE))
     stop("Package 'kohonen' is required to fit a SOM.", call. = FALSE)
-
+  
   d <- as_dea_data(x)
   data_mat <- cbind(d$X, d$Y)
-
+  
   sds <- apply(data_mat, 2, stats::sd)
   if (any(sds == 0))
     stop("SOM cannot use constant (zero-variance) column(s): ",
          toString(colnames(data_mat)[sds == 0]), ".", call. = FALSE)
-
+  
   eff <- as.numeric(compute_efficiency(d, rts = rts, dual = FALSE)$eff)
-
-  # set the seed locally, restoring the caller's RNG state on exit
-  if (!is.null(seed)) {
-    if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
-      old_seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
-      on.exit(assign(".Random.seed", old_seed, envir = .GlobalEnv), add = TRUE)
-    } else {
-      on.exit(suppressWarnings(rm(".Random.seed", envir = .GlobalEnv)),
-              add = TRUE)
-    }
-    set.seed(seed)
-  }
-
+  
+  # set the seed for reproducibility when one is supplied
+  if (!is.null(seed)) set.seed(seed)
+  
   sdata <- scale(data_mat)
   total <- xdim * ydim
   grid  <- kohonen::somgrid(xdim = xdim, ydim = ydim, topo = "hexagonal")
@@ -81,7 +72,7 @@ compute_som <- function(x, rts = c("crs", "vrs"), xdim = 8, ydim = 8,
     m <- mean(eff[fit$unit.classif == k])
     if (is.nan(m)) NA_real_ else m
   }, numeric(1))
-
+  
   structure(
     list(som = fit, labels = d$labels, efficiency = eff,
          node_efficiency = node_efficiency, rts = rts,

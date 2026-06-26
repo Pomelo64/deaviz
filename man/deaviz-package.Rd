@@ -54,8 +54,8 @@ Data Envelopment Analysis}.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/pomelo64/deaviz}
-  \item Report bugs at \url{https://github.com/pomelo64/deaviz/issues}
+  \item \url{https://github.com/Pomelo64/deaviz}
+  \item Report bugs at \url{https://github.com/Pomelo64/deaviz/issues}
 }
 
 }

@@ -102,7 +102,7 @@ automatically.
 | Panel data | `plot_panel_io_biplot()` |
 | Self-organizing maps | `plot_io_som()`, `plot_io_som_components()` |
 | Cross-efficiency matrix | `plot_cem_heatmap()`, `plot_cem_unfolding()`, `plot_cem_weights_heatmap()` |
-| Data | `chinese_cities` |
+| Data | `chinese_cities`, `taiwanese_banks` |
 
 ## Citation
 

@@ -43,7 +43,7 @@ plot_io_som <- function(som, labels = "all", max.overlaps.value = 10,
   .deaviz_check_alpha(transparency)
   if (!inherits(som, "dea_som"))
     som <- compute_som(som, ...)
-
+  
   spec <- .deaviz_label_spec(labels, som$labels, max.overlaps.value)
   if (!is.numeric(jitter_sd) || length(jitter_sd) != 1L || jitter_sd < 0)
     stop("`jitter_sd` must be a single non-negative number.", call. = FALSE)
@@ -51,29 +51,19 @@ plot_io_som <- function(som, labels = "all", max.overlaps.value = 10,
     stop("`seed` must be a single number or NULL.", call. = FALSE)
   if (!requireNamespace("kohonen", quietly = TRUE))
     stop("Package 'kohonen' is required for this plot.", call. = FALSE)
-
+  
   # blue (low) -> red (high) palette
   cool_to_hot <- function(n, alpha = transparency)
     .deaviz_sequential(n, alpha = alpha)
-
+  
   graphics::plot(som$som, type = "property", property = som$node_efficiency,
                  palette.name = cool_to_hot, main = title)
   if (!is.null(subtitle))
     graphics::mtext(subtitle, side = 3, line = 0.2, cex = 0.85)
-
+  
   if (spec$mode != "none") {
     pts <- som$som$grid$pts[som$som$unit.classif, , drop = FALSE]
-    if (!is.null(seed)) {
-      if (exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
-        old_seed <- get(".Random.seed", envir = .GlobalEnv, inherits = FALSE)
-        on.exit(assign(".Random.seed", old_seed, envir = .GlobalEnv),
-                add = TRUE)
-      } else {
-        on.exit(suppressWarnings(rm(".Random.seed", envir = .GlobalEnv)),
-                add = TRUE)
-      }
-      set.seed(seed)
-    }
+    if (!is.null(seed)) set.seed(seed)
     j <- matrix(stats::rnorm(nrow(pts) * 2, mean = 0, sd = jitter_sd), ncol = 2)
     if (spec$mode == "one") {
       keep <- as.character(som$labels) == spec$which
@@ -83,12 +73,12 @@ plot_io_som <- function(som, labels = "all", max.overlaps.value = 10,
                      cex = 1.1, font = 2)
     } else {
       txt <- if (spec$mode == "id")
-               as.character(match(as.character(som$labels), spec$known))
-             else som$labels
+        as.character(match(as.character(som$labels), spec$known))
+      else som$labels
       graphics::text(x = pts[, 1] + j[, 1], y = pts[, 2] + j[, 2],
                      labels = txt, col = "white", cex = 0.7)
     }
   }
-
+  
   invisible(som)
 }

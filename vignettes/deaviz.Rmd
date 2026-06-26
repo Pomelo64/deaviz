@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-#devtools::load_all()
+
 
 has_bench   <- requireNamespace("Benchmarking",  quietly = TRUE)
 has_smacof  <- requireNamespace("smacof",        quietly = TRUE)

@@ -1,26 +1,22 @@
-## Submission
+## Resubmission
 
-This is a new submission: deaviz 0.1.0.
+This is a resubmission of deaviz 0.1.0, addressing the points raised in review:
+
+* Function names in the Description now use parentheses (e.g. dea_data());
+  package names remain in single quotes.
+* Added method references with DOIs to the Description.
+* Removed writes to .GlobalEnv: the SOM functions (R/compute-som.R,
+  R/plot-io-som.R) no longer save/restore .Random.seed in the global
+  environment.
 
 ## R CMD check results
 
 On win-builder (R-devel and R-release): 0 errors | 0 warnings | 1 note.
 
-This is a new submission, so the "New submission" note is expected. The flagged
-words (Costa, Porembski, Sammon) are author surnames and are spelled correctly.
-
-Two further items can appear in a local `R CMD check --as-cran` but are
-environmental rather than package issues, and do not occur on CRAN's check
-machines:
-
-* "checking for future file timestamps ... NOTE: unable to verify current time"
-  -- the local machine could not reach a time server to validate timestamps.
-
-* "'qpdf' is needed for checks on size reduction of PDFs" (WARNING) -- the
-  system tool 'qpdf' was not installed locally. The package contains no PDFs
-  (the vignette is HTML and the package is built with --no-manual), and qpdf is
-  available on CRAN's machines.
-
+The note is the expected "New submission" note, together with "possibly
+misspelled words". The flagged words are author surnames from the Description
+references (Bana, Soares, Mello, Angulo, Meza, Porembski, Breitenstein, Alpar,
+Costa) and are spelled correctly.
 
 ## Test environments
 * Local: Pop!_OS 24.04 LTS, R 4.3.3
@@ -37,6 +33,6 @@ chunk on the corresponding package, so both build when the Suggests are absent.
 
 ## Spelling
 
-The spell check may flag domain terms and proper nouns (e.g. DEA, DMU,
-Porembski, Sammon, Costa, Kao, Liu, biplot, smacof). These are intentional and
-listed in inst/WORDLIST.
+Proper nouns and domain terms flagged by the spell check (e.g. DEA, DMU,
+Porembski, Costa, Bana, Soares, Mello, Angulo, Meza, Breitenstein, Alpar, Kao,
+Liu, biplot) are intentional and listed in inst/WORDLIST.
