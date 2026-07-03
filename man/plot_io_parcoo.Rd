@@ -6,6 +6,7 @@
 \usage{
 plot_io_parcoo(
   x,
+  variables = "all",
   efficiency = c("crs", "vrs", "none"),
   orientation = "in",
   labels = "none",
@@ -22,6 +23,10 @@ plot_io_parcoo(
 \arguments{
 \item{x}{A \code{dea_data} object, or a data frame coerced by
 \code{\link{as_dea_data}}.}
+
+\item{variables}{Which variables to show: \code{"all"} (default),
+\code{"inputs"}, \code{"outputs"}, or a vector of variable names or
+positions (positions index the inputs followed by the outputs).}
 
 \item{efficiency}{Efficiency model used to colour the lines by
 efficient/inefficient status: \code{"crs"} (default), \code{"vrs"} or

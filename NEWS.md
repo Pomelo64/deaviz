@@ -1,53 +1,45 @@
+# deaviz 0.2.0
+
+* New `plot_io_frontier()`: the classic two-dimensional DEA frontier-and-envelope
+  plot for a chosen input/output pair. Draws the units, the shaded
+  production-possibility set, and the efficient frontier for the selected
+  returns-to-scale (`crs`/`vrs`/`drs`/`irs`/`fdh`); colours points by their
+  efficiency in that two-variable sub-model; and optionally overlays the peer
+  (reference) network as lambda-weighted arrows from inefficient units to their
+  targets, or projection arrows to the frontier.
+* `plot_io_parcoo()` and `plot_io_radar()` gain a `variables` argument to
+  show a subset of the inputs/outputs: `"all"` (default), `"inputs"`,
+  `"outputs"`, or a vector of variable names or positions.
+
+* New dataset `taiwanese_banks`: a balanced panel of 22 Taiwanese commercial
+  banks over 2009-2011 (Kao & Liu, 2014, \doi{10.1016/j.omega.2013.09.001}),
+  used as the worked example for `plot_panel_io_biplot()`.
+* `plot_panel_io_biplot()` now accepts `inputs`, `outputs`, `id` and `period`
+  as integer column positions as well as names, and repels the loading-vector
+  labels (via ggrepel) so they no longer overlap.
+* New `x_angle` argument on `plot_io_parcoo()`, `plot_io_heatmap()`,
+  `plot_cem_heatmap()`, `plot_cem_weights_heatmap()` and
+  `plot_io_distributions()` to rotate long x-axis tick labels for readability.
+* A single DMU passed to `labels` now fades the rest of the plot into a focus
+  view (keeping the chosen DMU's sub-network / trajectory); the `fade` argument
+  tunes the fade level or disables it.
+
 # deaviz 0.1.0
 
-Initial release. `deaviz` provides high-dimensional visualization methods for
-Data Envelopment Analysis (DEA), built around a single validated `dea_data()`
-object and following a `compute_*()` / `plot_*()` naming convention.
-
-## Data object
-
-* `dea_data()` constructs the validated input/output object that every function
-  consumes; `as_dea_data()` coerces existing data. `print()` methods are
-  provided for the `dea_data` and `dea_som` classes.
-
-## Analysis
-
-* `compute_efficiency()` --- radial DEA efficiency scores (CRS, VRS, DRS, IRS or
-  FDH; input- or output-oriented).
-* `compute_cross_efficiency()`, `compute_cross_efficiency_weights()` and
-  `standardize_weights()` --- cross-efficiency scores and their weight profiles.
-* `compute_multiplier_weights()` --- optimal input/output multipliers.
-* `compute_som()` --- a self-organizing map of the input/output profiles.
-
-## Visualization
-
-* Data and efficiency overview: `plot_io_distributions()`,
-  `plot_efficiency_distributions()`, `plot_io_efficients()`,
-  `plot_io_scatter()`, `plot_io_heatmap()`.
-* Frontier and projections: `plot_io_costa_frontier()`, `plot_io_pca_biplot()`,
-  `plot_io_mds()`, `plot_io_3dscatter()`.
-* Benchmarking networks: `plot_io_lambda_network()`, `plot_io_peer_network()`.
-* Cross-efficiency: `plot_cem_heatmap()`, `plot_cem_unfolding()`,
-  `plot_cem_weights_heatmap()`.
-* Profiles: `plot_io_radar()` (with its `coord_radar()` coordinate system) and
-  `plot_io_parcoo()`.
-* Self-organizing maps: `plot_io_som()`, `plot_io_som_components()`.
-* Panel data: `plot_panel_io_biplot()` draws each DMU's trajectory over time.
-
-## Cross-cutting features
-
-* Passing a single DMU to `labels` fades the rest of the plot into a focus
-  view; the `fade` argument tunes the level or disables it.
-* `x_angle` rotates long x-axis tick labels on `plot_io_distributions()`,
-  `plot_io_heatmap()`, `plot_io_parcoo()`, `plot_cem_heatmap()` and
-  `plot_cem_weights_heatmap()`.
-* Many plots accept `interactive = TRUE` to return a `plotly` widget.
-* Consistent, colour-blind-safe style throughout: the Okabe-Ito qualitative
-  palette, a viridis sequential palette, and a shared minimal theme.
-
-## Datasets
-
-* `chinese_cities` --- 35 Chinese cities with three inputs and three outputs
-  (Sueyoshi, 1992).
-* `taiwanese_banks` --- a balanced panel of 22 Taiwanese commercial banks over
-  2009-2011 (Kao & Liu, 2014), the worked example for `plot_panel_io_biplot()`.
+* First release: a from-scratch rebuild of the DEA-Viz visualization methods as
+  an R package.
+* All functions are built on a single validated `dea_data` object and follow a
+  `compute_*` / `plot_*` naming convention.
+* Analysis: `compute_efficiency()`, `compute_cross_efficiency()`,
+  `compute_cross_efficiency_weights()`, `standardize_weights()`,
+  `compute_multiplier_weights()`, `compute_som()`.
+* Visualization: `plot_efficiency_bar()`, `plot_efficiency_comparison()`,
+  `plot_cross_efficiency()`, `plot_cem_unfolding()`,
+  `plot_cross_efficiency_weights_heatmap()`, `plot_pca_biplot()`, `plot_mds()`,
+  `plot_porembski_network()`, `plot_panel_biplot()`, `plot_som()`,
+  `plot_som_components()`, `plot_costa_frontier()`,
+  `plot_parallel_coordinates()`, `plot_3d_scatter()`, `plot_histograms()`,
+  `plot_dotplots()`, `plot_pairwise_scatter()`, `plot_input_output_heatmap()`.
+* Ships the `chinese_cities` example dataset (35 cities, 3 inputs, 3 outputs).
+* Consistent, colour-blind-safe visual style across all plots: Okabe-Ito
+  qualitative palette, viridis sequential palette, and a shared minimal theme.

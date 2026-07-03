@@ -52,6 +52,13 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
   grDevices::hcl.colors(n, "viridis", alpha = alpha)
 }
 
+# Diverging anchors for signed quantities (e.g. change over time), built from
+# the package's own status pair: orange for increase (the "Efficient" hue),
+# Okabe-Ito grey at zero, sky blue for decrease (the "Inefficient" hue).
+.deaviz_diverging <- function() {
+  c(low = "#56B4E9", mid = "#999999", high = "#E69F00")
+}
+
 # A plotly colorscale (list of [fraction, colour] stops) matching the viridis
 # sequential palette used by the static plots.
 .deaviz_viridis_colorscale <- function(n = 32L) {
@@ -78,11 +85,11 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
     colorbar = list(title = colorbar_title),
     hovertemplate = paste0("%{y} / %{x}: %{z:", hoverfmt, "}<extra></extra>"))
   plotly::layout(p,
-    title = title,
-    xaxis = list(title = xtitle, tickangle = -90,
-                 showticklabels = show_x_labels),
-    yaxis = list(title = ytitle, autorange = "reversed",
-                 showticklabels = show_y_labels))
+                 title = title,
+                 xaxis = list(title = xtitle, tickangle = -90,
+                              showticklabels = show_x_labels),
+                 yaxis = list(title = ytitle, autorange = "reversed",
+                              showticklabels = show_y_labels))
 }
 
 # Validate and resolve the unified `labels` argument shared by the plotting
@@ -126,7 +133,7 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
   if (spec$mode == "none") return(g)
   m <- ggplot2::aes(x = .data[[xcol]], y = .data[[ycol]],
                     label = .data[[labcol]])
-
+  
   # "id" mode: write each DMU's row number centred inside its own marker
   if (spec$mode == "id") {
     d <- data
@@ -137,7 +144,7 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
       size = id_size, colour = id_colour, fontface = "bold",
       inherit.aes = FALSE))
   }
-
+  
   if (spec$mode == "one") {
     d  <- data[as.character(data[[labcol]]) == spec$which, , drop = FALSE]
     pm <- ggplot2::aes(x = .data[[xcol]], y = .data[[ycol]])
@@ -174,14 +181,14 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
         segment.alpha = 0.9, inherit.aes = FALSE))
     }
     return(g + ggplot2::geom_text(data = d, mapping = m, size = one_size,
-      fontface = "bold", vjust = -1.1, inherit.aes = FALSE))
+                                  fontface = "bold", vjust = -1.1, inherit.aes = FALSE))
   }
   mo <- if (spec$mode == "all") Inf else max_overlaps
   g + if (repel)
     ggrepel::geom_text_repel(data = data, mapping = m, size = size, seed = 1,
-      max.overlaps = mo, inherit.aes = FALSE)
-    else ggplot2::geom_text(data = data, mapping = m, size = size,
-      vjust = -0.6, check_overlap = TRUE, inherit.aes = FALSE)
+                             max.overlaps = mo, inherit.aes = FALSE)
+  else ggplot2::geom_text(data = data, mapping = m, size = size,
+                          vjust = -0.6, check_overlap = TRUE, inherit.aes = FALSE)
 }
 
 # Shared minimal ggplot2 theme.
@@ -284,7 +291,7 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
 # `fade` may be a single logical or a single number in [0, 1].
 .deaviz_check_fade <- function(fade, name = "fade") {
   ok <- (is.logical(fade) || is.numeric(fade)) &&
-        length(fade) == 1L && !is.na(fade)
+    length(fade) == 1L && !is.na(fade)
   if (ok && is.numeric(fade)) ok <- fade >= 0 && fade <= 1
   if (!ok)
     stop("`", name, "` must be TRUE/FALSE or a single number in [0, 1].",
@@ -305,4 +312,32 @@ coord_radar <- function(theta = "x", start = 0, direction = 1) {
   if (!is.logical(value) || length(value) != 1L || is.na(value))
     stop("`", name, "` must be a single TRUE or FALSE.", call. = FALSE)
   invisible(TRUE)
+}
+
+# Resolve a `variables` selection (for the profile plots) to a vector of column
+# names drawn from the inputs and outputs.
+.deaviz_pick_vars <- function(variables, inames, onames) {
+  allnames <- c(inames, onames)
+  if (is.character(variables) && length(variables) == 1L &&
+      variables %in% c("all", "inputs", "outputs")) {
+    return(switch(variables, all = allnames, inputs = inames, outputs = onames))
+  }
+  if (is.numeric(variables)) {
+    if (length(variables) < 1L ||
+        any(variables < 1 | variables > length(allnames) |
+            variables != as.integer(variables)))
+      stop("`variables` positions must be whole numbers in 1:",
+           length(allnames), ".", call. = FALSE)
+    return(allnames[variables])
+  }
+  if (is.character(variables)) {
+    sel <- sub("^[io]_", "", variables, ignore.case = TRUE)
+    bad <- setdiff(sel, allnames)
+    if (length(bad))
+      stop("`variables` not found: ", toString(bad),
+           ". Available: ", toString(allnames), ".", call. = FALSE)
+    return(sel)
+  }
+  stop("`variables` must be \"all\", \"inputs\", \"outputs\", or a vector of ",
+       "variable names or positions.", call. = FALSE)
 }

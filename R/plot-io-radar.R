@@ -7,6 +7,9 @@
 #'
 #' @param x A \code{dea_data} object, or a data frame coerced by
 #'   \code{\link{as_dea_data}}.
+#' @param variables Which variables to show: \code{"all"} (default),
+#'   \code{"inputs"}, \code{"outputs"}, or a vector of variable names or
+#'   positions (positions index the inputs followed by the outputs).
 #' @param efficiency Efficiency model used to colour the DMUs by
 #'   efficient/inefficient status: \code{"crs"} (default), \code{"vrs"} or
 #'   \code{"none"}.
@@ -48,7 +51,8 @@
 #' plot_io_radar(df, efficiency = "crs")
 #'
 #' @export
-plot_io_radar <- function(x, efficiency = c("crs", "vrs", "none"),
+plot_io_radar <- function(x, variables = "all",
+                          efficiency = c("crs", "vrs", "none"),
                           orientation = "in", labels = "none",
                           max.overlaps.value = 10,
                           transparency = 0.7, fade = TRUE, subtitle = NULL, title = NULL, interactive = FALSE, ...) {
@@ -57,6 +61,11 @@ plot_io_radar <- function(x, efficiency = c("crs", "vrs", "none"),
 
   d    <- as_dea_data(x)
   io   <- as.data.frame(cbind(d$X, d$Y))
+  io   <- io[, .deaviz_pick_vars(variables, colnames(d$X), colnames(d$Y)),
+             drop = FALSE]
+  if (ncol(io) < 3L)
+    stop("`variables` must select at least 3 variables for a radar plot.",
+         call. = FALSE)
   vars <- colnames(io)
   lab  <- d$labels
   if (is.null(lab)) lab <- paste0("DMU", seq_len(nrow(io)))

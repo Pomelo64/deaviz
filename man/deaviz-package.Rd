@@ -60,11 +60,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Shahin Ashkiani \email{Contact@Shahin-Ashkiani.com}
+\strong{Maintainer}: Shahin Ashkiani \email{contact@Shahin-Ashkiani.com}
 
 Authors:
 \itemize{
-  \item Shahin Ashkiani \email{Contact@Shahin-Ashkiani.com}
+  \item Shahin Ashkiani \email{contact@Shahin-Ashkiani.com}
 }
 
 }

@@ -6,6 +6,9 @@
 #'
 #' @param x A \code{dea_data} object, or a data frame coerced by
 #'   \code{\link{as_dea_data}}.
+#' @param variables Which variables to show: \code{"all"} (default),
+#'   \code{"inputs"}, \code{"outputs"}, or a vector of variable names or
+#'   positions (positions index the inputs followed by the outputs).
 #' @param efficiency Efficiency model used to colour the lines by
 #'   efficient/inefficient status: \code{"crs"} (default), \code{"vrs"} or
 #'   \code{"none"}.
@@ -51,7 +54,8 @@
 #' plot_io_parcoo(df, efficiency = "crs")
 #'
 #' @export
-plot_io_parcoo <- function(x, efficiency = c("crs", "vrs", "none"),
+plot_io_parcoo <- function(x, variables = "all",
+                           efficiency = c("crs", "vrs", "none"),
                            orientation = "in", labels = "none",
                            max.overlaps.value = 10, transparency = 0.7, fade = TRUE, x_angle = NULL, subtitle = NULL, title = NULL,
                            interactive = FALSE, ...) {
@@ -60,6 +64,10 @@ plot_io_parcoo <- function(x, efficiency = c("crs", "vrs", "none"),
 
   d    <- as_dea_data(x)
   cols <- as.data.frame(cbind(d$X, d$Y))
+  cols <- cols[, .deaviz_pick_vars(variables, colnames(d$X), colnames(d$Y)),
+               drop = FALSE]
+  if (ncol(cols) < 2L)
+    stop("`variables` must select at least 2 variables.", call. = FALSE)
   lab  <- d$labels
   if (is.null(lab)) lab <- paste0("DMU", seq_len(nrow(cols)))
 

@@ -27,8 +27,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-`deaviz` turns the numbers behind a Data Envelopment Analysis (DEA), whether they are input/output profiles or the computational outcomes of various DEA models, into plots of efficiency distributions, input/output relationships, efficient frontier representations, projection biplots, benchmarking networks, cross-efficiency maps, and multi-period trajectories for panel data. This vignette walks through a typical workflow using two bundled datasets.
+`deaviz` turns the numbers behind a Data Envelopment Analysis (DEA), whether the inputs/outputs profiles or the computational outcome of various DEA models, into
+plots: efficiency distributions, input/output relationships, an efficient
+frontier representation, projection biplots, benchmarking networks, cross-efficiency maps, and
+multi-period trajectories for panel data. This vignette walks through the typical workflow on
+two bundled datasets.
 
 The workflow has three steps that map onto the package's naming convention:
 
@@ -49,15 +52,13 @@ skipped, so this vignette always builds.)
 
 ## The data object
 
-`deaviz` ships with `chinese_cities`, a classic cross-sectional DEA benchmark of 35
+`deaviz` ships `chinese_cities`, a classic cross-sectional DEA benchmark of 35
 cities with three inputs and three outputs (Sueyoshi, 1992). `dea_data()`
 records which columns
 are inputs, which are outputs, and which identifies the DMU. Columns can be
 given by name or by position.
 
-
-
-So, the `dea_data` object can be defined either by the input and output variable names: 
+So the `dea_data` object can be defined either by the input and output variable names as follows: 
 
 ```{r dea-data}
 d <- dea_data(
@@ -82,13 +83,14 @@ d <- dea_data(
 ```
 
 
-Every downstream function accepts this `d` object. If your input/output columns are
-prefixed `i_` / `o_`, `dea_data()` will detect them automatically, allowing you to omit the `inputs` and `outputs` arguments.
-
+Everything downstream takes this `d` object. If your input/output columns are
+prefixed `i_` / `o_`, `dea_data()` detects them automatically and you can skip
+the `inputs`/`outputs` arguments.
 
 ## Efficiency scores
 
-The `compute_efficiency()` function returns radial efficiency scores, along with peer and multiplier weights. Returns-to-scale (RTS) and orientation can be specified as arguments.
+`compute_efficiency()` returns radial efficiency scores (plus peer weights and
+multiplier weights). Returns-to-scale and orientation are arguments.
 
 ```{r efficiency, eval = has_bench}
 eff <- compute_efficiency(x = d, rts = "vrs", orientation = "in")
@@ -97,7 +99,7 @@ head(round(eff$eff, 3))
 
 ## Distributions: the shape of efficiency
 
-Start by looking at the distributions' spread. `plot_efficiency_distributions()` shows the
+Start by looking at the spread. `plot_efficiency_distributions()` shows the
 distribution of efficiency scores, while `plot_io_distributions()` shows the raw
 input/output variables.
 
@@ -109,11 +111,11 @@ plot_efficiency_distributions(d, rts = "vrs", title = "Chinese Cities Efficiency
 plot_io_distributions(d, type = "box", x_angle = 30)
 ```
 
+Note the `x_angle = 30`: the input/output names are long, so tilting the x-axis
+tick labels keeps them readable. Every plot whose x-axis carries variable or DMU
+names accepts `x_angle`.
 
-Note the use of `x_angle = 30`: because the input and output names are long, tilting the x-axis tick labels keeps them readable. Every plot that displays variable or DMU names on the x-axis accepts the `x_angle` argument.
-
-
-The  `plot_io_efficients()` function compares the number of efficient versus inefficient DMUs.
+`plot_io_efficients()` counts how many DMUs are efficient versus inefficient.
 
 ```{r efficients, eval = has_bench, fig.height = 3.6}
 plot_io_efficients(d, rts = "vrs", transparency = 1)
@@ -121,26 +123,25 @@ plot_io_efficients(d, rts = "vrs", transparency = 1)
 
 ## Input/output relationships and the frontier
 
-
-`plot_io_scatter()` lays out every input-against-output pair if no vector of inputs and/or outputs is assigned to `vars`. If a vector is provided, then the scatterplots will be limited to the pairwise combinations of those variables. Regardless, the visual marks are colored by efficiency.
-
+`plot_io_scatter()` lays out every input-against-output pair if no vector of inputs and/or outputs is assigned to `vars =` and if a vector provided, then the scatterplots will be limited to the pair-wise combination of the the variables. Regardless, the visual marks are coloured by
+efficiency.
 
 ```{r scatter, eval = has_bench, fig.height = 6}
 
 plot_io_scatter(d, vars = c("industrial_labour_force", "gross_industrial_output", "retail_sales") , color = "vrs")
 ```
 
-It is possible to plot scatterplots against the efficiency scores of the DMUs as well:
+It is possible to plot scatters against the efficiency scores of the DMUs as well: 
 
 ```{r scatter-efficiency, eval = has_bench, fig.height = 6}
 
 plot_io_scatter(d, vars = c("industrial_labour_force", "gross_industrial_output", "retail_sales"), efficiency = "vrs" , color = "vrs")
 ```
 
-## Frontier Visualization
 
-
-The only frontier visualization plot available is via `plot_io_costa_frontier()`, which collapses all inputs and outputs onto a single aggregated frontier (Bana e Costa et al., 2016).
+The only frontier visualization plot is available via 
+`plot_io_costa_frontier()` and it collapses all inputs and outputs onto a
+single aggregated frontier (Bana e Costa et al., 2016).
 
 
 
@@ -148,11 +149,36 @@ The only frontier visualization plot available is via `plot_io_costa_frontier()`
 plot_io_costa_frontier(d)
 ```
 
+## The textbook frontier
+
+For teaching it is often clearest to take a single input against a single
+output and draw the efficient frontier the way textbooks do.
+`plot_io_frontier()` does exactly that: pick one input and one output, choose
+the returns-to-scale, and it shades the production-possibility set and traces
+the frontier, colouring each unit by its efficiency in that two-variable
+sub-model.
+
+```{r frontier, eval = has_bench}
+plot_io_frontier(d, input = "working_funds", output = "retail_sales",
+                 rts = "vrs")
+```
+
+Turn on `peers_network` to see which efficient peers an inefficient city is
+benchmarked against; the arrows are weighted by the envelopment ($\lambda$)
+weights.
+
+```{r frontier-peers, eval = has_bench}
+plot_io_frontier(d, input = "working_funds", output = "retail_sales",
+                 rts = "vrs", peers_network = TRUE, labels = "Chengdu")
+```
+
 ## Projection biplots
 
-
-The package offers two ways to project the multidimensional input/output space onto a readable plane. First,  `plot_io_pca_biplot()` uses Principal Component Analysis (PCA) to draw the input/output loading vectors. Second, `plot_io_mds()` uses metric (ratio) multidimensional scaling via the **smacof** majorization algorithm (de Leeuw & Mair, 2009). The graphical application of these projections to DEA follows Adler & Raveh (2008).
-
+Two ways to project the multidimensional input/output space onto a readable
+plane. `plot_io_pca_biplot()` uses PCA, drawing the input/output loading vectors;
+`plot_io_mds()` uses metric (ratio) multidimensional scaling via the **smacof**
+majorization algorithm (de Leeuw & Mair, 2009). The graphical use of such
+projections for DEA follows Adler & Raveh (2008).
 
 Let's have a look at the PCA biplot: 
 
@@ -160,15 +186,15 @@ Let's have a look at the PCA biplot:
 plot_io_pca_biplot(d, rts = "vrs")
 ```
 
-The vectors are the dataset's inputs and outputs, and they show the direction in which the value of the corresponding input or output increases in the 2D space.
+The vectors are the dataset's inputs and outputs and they show the direction towards which the value of the corresponding input or output increases in the 2d space. 
 
-In contrast, we can use an MDS algorithm to reduce the dimensionality of the dataset and represent the DMUs visually in a 2D plot.
+In contrast, we can use an MDS algorithm to reduce the dimensionality of the dataset and represent the DMUs visually in a 2d plot. 
 
 ```{r mds, eval = has_bench && has_smacof}
 plot_io_mds(d)
 ```
 
-What to do with overcrowded plots? One solution offered by the `deaviz` package is to make the plot interactive so that you can zoom in and hover over the visual marks to get information about them.
+What to do with overcrowded plots? One solution offered by the `deaviz` package is to make the plot interactive so one can zoom into the plot and hover over the visual marks to get information about them. 
 
 ```{r mds-interactive, eval = FALSE}
 plot_io_mds(d, interactive = TRUE)
@@ -176,9 +202,11 @@ plot_io_mds(d, interactive = TRUE)
 
 ## Benchmarking networks
 
-
-
-For inefficient DMUs, DEA identifies the efficient peers they are benchmarked against. `plot_io_lambda_network()` draws those peer relationships weighted by the envelopment ($\lambda$) weights, laid out with Sammon mapping (Sammon, 1969) as in Porembski et al. (2005). Meanwhile, `plot_io_peer_network()`lays out who is a peer to whom; therefore, the edges are directed from the inefficient units to their targets.
+For inefficient DMUs, DEA identifies the efficient peers they are benchmarked
+against. `plot_io_lambda_network()` draws those peer relationships weighted by
+the envelopment ($\lambda$) weights, laid out with Sammon mapping (Sammon,
+1969) as in Porembski et al. (2005); `plot_io_peer_network()` lays out who is a
+peer to whom, therefore the edges are directed from the inefficient units to their targets. 
 
 
 ```{r lambda, eval = has_bench}
@@ -195,13 +223,15 @@ It is sometimes important in the networks to focus on and highlight a specific D
 plot_io_peer_network(d,layout = "fr",labels = "Xian", rts = "vrs")
 ```
 
-
-It is sometimes important to highlight and focus on a specific DMU within a network. The `deaviz` package addresses this need via the `labels` argument:
+Pay attention that the default layout of the network is changed by providing a pre-defined value to the `layout =` argument. 
 
 ## Cross-efficiency
 
-
-Cross-efficiency scores every DMU using every other DMU's optimal weights (Doyle & Green, 1994). `compute_cross_efficiency()` builds the matrix, which `plot_cem_heatmap()` displays. `plot_cem_unfolding()` unfolds the same matrix into a map of who rates whom favorably (Ashkiani & Mar-Molinero, 2017), and `plot_cem_weights_heatmap()` shows the underlying weight profiles.
+Cross-efficiency scores every DMU using every other DMU's optimal weights
+(Doyle & Green, 1994). `compute_cross_efficiency()` builds the matrix, which `plot_cem_heatmap()`
+displays. `plot_cem_unfolding()` unfolds the same matrix into a map of who rates
+whom favourably (Ashkiani & Mar-Molinero, 2017), and `plot_cem_weights_heatmap()` shows the underlying weight
+profiles.
 
 ```{r cem, eval = has_bench, fig.height = 6}
 cem <- compute_cross_efficiency(d)
@@ -217,8 +247,7 @@ plot_cem_unfolding(cem)
 plot_cem_weights_heatmap(d, x_angle = 30)
 ```
 
-
-What if you want to highlight a specific DMU? Just as before, you can use the `labels` argument:
+What if we want to highlight a specific DMU? Same as before, we can use the `labels=` argument: 
 
 ```{r cem-weights-focus, eval = has_bench, fig.height = 6}
 plot_cem_weights_heatmap(d, x_angle = 30, labels = "Xian")
@@ -227,7 +256,7 @@ plot_cem_weights_heatmap(d, x_angle = 30, labels = "Xian")
 ## Profile plots
 
 `plot_io_radar()` and `plot_io_parcoo()` show each DMU's full input/output
-profile as a radar polygon or a parallel-coordinates line.
+profile, as a radar polygon or a parallel-coordinates line.
 
 ```{r radar, eval = has_bench, fig.width = 6.5, fig.height = 5.5}
 plot_io_radar(d, efficiency = "vrs")
@@ -237,18 +266,28 @@ plot_io_radar(d, efficiency = "vrs")
 plot_io_parcoo(d, efficiency = "vrs", x_angle = 30)
 ```
 
+Both accept a `variables` argument to show a subset of the profile:
+`"all"` (the default), `"inputs"`, `"outputs"`, or a vector of variable names
+or positions.
+
+```{r parcoo-variables, eval = has_bench, fig.height = 4.2}
+plot_io_parcoo(d, variables = "inputs", efficiency = "vrs", x_angle = 30)
+```
+
 ## Highlighting a single DMU: the focus view
 
-
-This feature is powerful enough to warrant its own section to explain it in greater detail. When you pass a single DMU name to the `labels` argument, `deaviz` puts it center stage: the target DMU is ringed and highlighted with a label, while all other units fade into the background. In network plots, the focus restricts the view to the chosen DMU's immediate sub-network; in panel biplots, it isolates that specific DMU's trajectory.
+This feature is so useful that it demands a dedicated section to explain it in further details. Pass one DMU name to `labels` and `deaviz` puts it centre stage: it is ringed and
+labelled, while everything else fades back. For the network plots the focus keeps
+the chosen DMU's sub-network; for the panel biplot it keeps that DMU's
+trajectory.
 
 ```{r focus, eval = has_bench}
 plot_io_pca_biplot(d, rts = "vrs", labels = "Beijing")
 ```
 
-
-The amount of fade is tunable through the `fade` argument: `TRUE` (default) uses a sensible level, `FALSE`  turns it off, and a number sets the alpha of the faded marks directly (a larger number keeps them more visible).
-
+The amount of fade is tunable through the same `fade` argument: `TRUE` (default)
+uses a sensible level, `FALSE` turns it off, and a number sets the alpha of the
+faded marks directly (larger keeps them more visible).
 
 ```{r focus-level, eval = has_bench}
 plot_io_parcoo(d, efficiency = "vrs", labels = "Beijing", fade = 0.4)
@@ -274,34 +313,50 @@ plot_io_som(som)
 
 ## Multi-period data: trajectories
 
+For panel data, `plot_panel_io_biplot()` places every DMU-period on a shared PCA
+biplot and joins each DMU's points into a trajectory over time. The bundled
+`taiwanese_banks` dataset is a balanced panel of 22 commercial banks over
+2009-2011 (Kao & Liu, 2014). Inputs and outputs can be given by position.
 
-For panel data, `plot_panel_io_biplot()` projects every DMU-period combination onto a shared PCA biplot and connects each DMU's data points to form a trajectory over time. The bundled `taiwanese_banks` dataset provides a balanced panel of 22 commercial banks from 2009 to 2011 (Kao & Liu, 2014). This dataset serves as a reproducible benchmark to demonstrate the package's panel functionality, regardless of the underlying input and output specifications. We can visualize these trajectories using the `deaviz` panel biplot while retaining all DMU identifiers on the plot:
-
-```{r panel-id, eval = has_bench, fig.width = 7.5, fig.height = 5.5}
+```{r panel, eval = has_bench, fig.width = 7.5, fig.height = 5.5}
 plot_panel_io_biplot(
   taiwanese_banks, id = "DMU", period = "Year",
-  inputs = 3:5, outputs = 6:8, labels = "id"
+  inputs = 3:5, outputs = 6:8, labels = "Cathay"
 )
 ```
 
+Here the focus view keeps only Cathay's three-year path lit while the other banks
+recede, and the loading vectors are spread apart so their labels stay legible. 
 
-The trajectories, the paths that the DMUs have traversed based on their input/output profiles, are presented via the segmented vectors that connect each DMU's position over the periods.
+It is noteworthy that the PCA is computed over the pooled data. 
 
-You might want to draw attention to one specific DMU. For instance, here the focus view keeps only Cathay's three-year path lit while the other banks recede, and the loading vectors are spread apart so their labels stay legible.
+`plot_panel_io_parcoo()` offers a simpler view of the same panel: the periods
+form the parallel axes and each DMU is one line, tracing either a single
+input/output variable or the per-period efficiency score (each period's
+cross-section solved as its own DEA problem).
 
-```{r panel-Cathay, eval = has_bench, fig.width = 7.5, fig.height = 5.5}
-plot_panel_io_biplot(
-  taiwanese_banks, id = "DMU", period = "Year",
-  inputs = 3:5, outputs = 6:8, labels = "Cathay", fade = 0.25
+```{r panel-parcoo, eval = has_bench, fig.height = 4.6}
+plot_panel_io_parcoo(
+  taiwanese_banks, y = "vrs", id = "DMU", period = "Year",
+  inputs = 3:5, outputs = 6:8, labels = "Cathay"
 )
 ```
 
-It is worth noting that the PCA is computed on the pooled data.
+With `color_by_trend = TRUE` each line is coloured by the DMU's overall change
+(last period minus first), so the biggest risers and fallers stand out.
+
+```{r panel-parcoo-trend, eval = has_bench, fig.height = 4.6}
+plot_panel_io_parcoo(
+  taiwanese_banks, y = "demand_deposits", id = "DMU", period = "Year",
+  color_by_trend = TRUE
+)
+```
 
 ## Interactive plots
 
-
-Many plots accept the `interactive = TRUE` argument, which returns a `plotly` widget with hover tooltips instead of a static `ggplot` object. This feature requires the `plotly` package and is best viewed within an HTML context:
+Many plots accept `interactive = TRUE`, returning a `plotly` widget with hover
+tooltips instead of a static `ggplot`. This needs the `plotly` package and is
+best viewed in an HTML context:
 
 ```{r interactive, eval = FALSE}
 plot_io_pca_biplot(d, rts = "vrs", labels = "Beijing", interactive = TRUE)

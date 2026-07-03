@@ -1,9 +1,9 @@
 Package: deaviz
 Type: Package
 Title: Visualization of Data Envelopment Analysis Problems
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Shahin", "Ashkiani", role = c("aut", "cre"),
-                  email = "Contact@Shahin-Ashkiani.com")
+                  email = "contact@Shahin-Ashkiani.com")
 Description: High-dimensional visualization methods for data envelopment
     analysis (DEA), gathering in one place techniques that have appeared in the
     literature but remained scattered and largely unimplemented: cross-efficiency
@@ -11,6 +11,7 @@ Description: High-dimensional visualization methods for data envelopment
     principal component analysis biplots, multidimensional-scaling
     colour-plots, self-organizing maps, the Costa bi-dimensional efficient
     frontier, parallel coordinates, radar charts, panel-data trajectory biplots,
+    two-dimensional sub-model frontier plots with optional peer networks, full-model
     peer and reference networks, and a set of descriptive plots. The package is
     built around a single validated dea_data() object and uses the 'Benchmarking'
     package as its DEA engine. The implemented methods draw on a body of

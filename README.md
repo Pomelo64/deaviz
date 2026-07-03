@@ -97,7 +97,7 @@ automatically.
 | SOM analysis | `compute_som()` |
 | Descriptive (inputs/outputs) | `plot_io_distributions()`, `plot_io_scatter()`, `plot_io_heatmap()`, `plot_io_parcoo()`, `plot_io_radar()` |
 | Efficiency plots | `plot_efficiency_distributions()`, `plot_io_efficients()` |
-| Projections & frontier | `plot_io_pca_biplot()`, `plot_io_mds()`, `plot_io_costa_frontier()`, `plot_io_3dscatter()` |
+| Projections & frontier | `plot_io_pca_biplot()`, `plot_io_mds()`, `plot_io_costa_frontier()`, `plot_io_frontier()`, `plot_io_3dscatter()` |
 | Reference networks | `plot_io_lambda_network()`, `plot_io_peer_network()` |
 | Panel data | `plot_panel_io_biplot()` |
 | Self-organizing maps | `plot_io_som()`, `plot_io_som_components()` |
@@ -114,9 +114,12 @@ If you use this package, please cite the thesis it is based on:
 
 See `citation("deaviz")` for the BibTeX entry.
 
-##  Development Note
+## Development note
 
-This package implements my DEA-Viz methods. An AI coding assistant (Claude, Anthropic) was used to help implement and refine the R code from my specifications and prototype functions; I designed the methods, and reviewed, tested, and validated all code, taking full responsibility for the software.
+This package implements my DEA-Viz methods. An AI coding assistant (Claude,
+Anthropic) was used to help implement and refine the R code from my
+specifications and prototype functions; I designed the methods, and reviewed,
+tested, and validated all code, taking full responsibility for the software.
 
 ## License
 
