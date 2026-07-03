@@ -1,4 +1,4 @@
-# deaviz
+# deaviz <img src="man/figures/logo.png" align="right" height="138" alt="" />
 
 High-dimensional visualization methods for **data envelopment analysis (DEA)**,
 gathered into a single R package. It brings together techniques that have
