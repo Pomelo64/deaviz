@@ -1,5 +1,9 @@
 # deaviz 0.2.0
 
+* New `plot_panel_io_parcoo()`: traces a chosen input/output or the per-period
+  efficiency of every DMU across time, with the periods as parallel axes;
+  `color_by_trend` colours each line by the DMU's overall change (viridis, or a
+  zero-anchored diverging scale with `"diverging"`).
 * New `plot_io_frontier()`: the classic two-dimensional DEA frontier-and-envelope
   plot for a chosen input/output pair. Draws the units, the shaded
   production-possibility set, and the efficient frontier for the selected

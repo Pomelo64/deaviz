@@ -99,7 +99,7 @@ automatically.
 | Efficiency plots | `plot_efficiency_distributions()`, `plot_io_efficients()` |
 | Projections & frontier | `plot_io_pca_biplot()`, `plot_io_mds()`, `plot_io_costa_frontier()`, `plot_io_frontier()`, `plot_io_3dscatter()` |
 | Reference networks | `plot_io_lambda_network()`, `plot_io_peer_network()` |
-| Panel data | `plot_panel_io_biplot()` |
+| Panel data | `plot_panel_io_biplot()`, `plot_panel_io_parcoo()` |
 | Self-organizing maps | `plot_io_som()`, `plot_io_som_components()` |
 | Cross-efficiency matrix | `plot_cem_heatmap()`, `plot_cem_unfolding()`, `plot_cem_weights_heatmap()` |
 | Data | `chinese_cities`, `taiwanese_banks` |
