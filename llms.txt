@@ -1,0 +1,208 @@
+# deaviz
+
+High-dimensional visualization methods for **data envelopment analysis
+(DEA)**, gathered into a single R package. It brings together techniques
+that have appeared in the literature but remained scattered and largely
+unimplemented: cross-efficiency matrix unfolding, the Porembski
+reference-set graph, PCA biplots, multidimensional-scaling colour-plots,
+self-organizing maps, the Costa bi-dimensional efficient frontier,
+parallel coordinates, radar charts, panel-data trajectory biplots, peer
+and reference networks, and a set of descriptive plots.
+
+The methods follow the author’s PhD thesis (Ashkiani, 2019).
+
+## Design
+
+Everything is built around one validated object, `dea_data`, which every
+function accepts (plain data frames are coerced automatically).
+Functions follow a consistent naming convention
+`plot_<source>_<method>`:
+
+- `compute_*` — analysis, returns values (efficiency scores,
+  cross-efficiency matrices, multiplier weights, a fitted SOM).
+- `plot_io_*` — plots built from inputs/outputs (the `io`).
+- `plot_cem_*` — plots of the cross-efficiency matrix (the `cem`).
+- `plot_efficiency_*` — plots of the efficiency scores.
+- `plot_panel_io_*` — plots of panel (long-format) input/output data.
+
+Most plotting functions share the same four arguments:
+
+- `interactive` — `FALSE` (default) returns a static **ggplot2** object;
+  `TRUE` returns an interactive **plotly** object.
+- `labels` — `TRUE` (default) shows the identifying text labels for that
+  plot (DMU names on points and networks, DMU ticks on heatmaps,
+  variable names on distributions and radar, and so on).
+- `title` — an optional plot title.
+- `...` — passed through to the underlying geom (or to the relevant
+  `compute_*` function for the plots that take raw data).
+
+A shared colour scheme is used throughout: the colour-blind-safe
+Okabe–Ito palette for categories and viridis for continuous scales.
+
+The `Benchmarking` package is the DEA engine. The modelling and plotting
+packages are in `Suggests`; each function checks for the ones it needs
+and errors informatively if they are missing.
+
+## Installation
+
+``` r
+
+# install.packages("devtools")
+devtools::install_local("deaviz")          # from the package directory
+
+# install the suggested engines you intend to use, e.g.:
+install.packages(c("Benchmarking", "ggplot2", "plotly", "lpSolve",
+                   "smacof", "kohonen", "MASS", "ggrepel"))
+```
+
+## Quick start
+
+``` r
+
+library(deaviz)
+
+# Build the data object (the example data is not i_/o_ prefixed,
+# so name the inputs and outputs explicitly)
+d <- dea_data(
+  chinese_cities,
+  inputs  = c("industrial_labour_force", "working_funds", "investments"),
+  outputs = c("gross_industrial_output", "profit_and_tax", "retail_sales"),
+  id      = "DMU"
+)
+
+# Analysis
+eff <- compute_efficiency(d, rts = "crs")          # Farrell efficiency
+ce  <- compute_cross_efficiency(d)                 # cross-efficiency matrix
+
+# Visualization (static ggplot2 by default)
+plot_efficiency_distributions(d)
+plot_io_pca_biplot(d)
+plot_cem_heatmap(ce)
+plot_cem_unfolding(ce)
+plot_io_costa_frontier(d)
+plot_io_peer_network(d, size_by_peers = TRUE)
+
+# The same plot, interactive (plotly), with labels turned off
+plot_io_pca_biplot(d, interactive = TRUE, labels = FALSE)
+```
+
+With your own data you can skip the explicit `inputs`/`outputs` by
+prefixing columns `i_` (inputs) and `o_` (outputs);
+[`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md)
+then recognises them automatically.
+
+## Function overview
+
+| Area | Functions |
+|----|----|
+| Data object | [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md), [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md) |
+| Efficiency analysis | [`compute_efficiency()`](https://pomelo64.github.io/deaviz/reference/compute_efficiency.md), [`compute_multiplier_weights()`](https://pomelo64.github.io/deaviz/reference/compute_multiplier_weights.md) |
+| Cross-efficiency analysis | [`compute_cross_efficiency()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md), [`compute_cross_efficiency_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md), [`standardize_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md) |
+| SOM analysis | [`compute_som()`](https://pomelo64.github.io/deaviz/reference/compute_som.md) |
+| Descriptive (inputs/outputs) | [`plot_io_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_io_distributions.md), [`plot_io_scatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_scatter.md), [`plot_io_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_io_heatmap.md), [`plot_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_io_parcoo.md), [`plot_io_radar()`](https://pomelo64.github.io/deaviz/reference/plot_io_radar.md) |
+| Efficiency plots | [`plot_efficiency_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_efficiency_distributions.md), [`plot_io_efficients()`](https://pomelo64.github.io/deaviz/reference/plot_io_efficients.md) |
+| Projections & frontier | [`plot_io_pca_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_io_pca_biplot.md), [`plot_io_mds()`](https://pomelo64.github.io/deaviz/reference/plot_io_mds.md), [`plot_io_costa_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_costa_frontier.md), [`plot_io_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_frontier.md), [`plot_io_3dscatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dscatter.md) |
+| Reference networks | [`plot_io_lambda_network()`](https://pomelo64.github.io/deaviz/reference/plot_io_lambda_network.md), [`plot_io_peer_network()`](https://pomelo64.github.io/deaviz/reference/plot_io_peer_network.md) |
+| Panel data | [`plot_panel_io_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_biplot.md), [`plot_panel_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_parcoo.md) |
+| Self-organizing maps | [`plot_io_som()`](https://pomelo64.github.io/deaviz/reference/plot_io_som.md), [`plot_io_som_components()`](https://pomelo64.github.io/deaviz/reference/plot_io_som_components.md) |
+| Cross-efficiency matrix | [`plot_cem_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_cem_heatmap.md), [`plot_cem_unfolding()`](https://pomelo64.github.io/deaviz/reference/plot_cem_unfolding.md), [`plot_cem_weights_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_cem_weights_heatmap.md) |
+| Data | `chinese_cities`, `taiwanese_banks` |
+
+## Citation
+
+If you use this package, please cite the thesis it is based on:
+
+> Ashkiani, S. (2019). *Four Essays on Data Visualization and Anomaly
+> Detection of Data Envelopment Analysis Problems* \[PhD thesis,
+> Universitat Autonoma de Barcelona\].
+> <https://ddd.uab.cat/record/240333>
+
+See `citation("deaviz")` for the BibTeX entry.
+
+## Development note
+
+This package implements my DEA-Viz methods. An AI coding assistant
+(Claude, Anthropic) was used to help implement and refine the R code
+from my specifications and prototype functions; I designed the methods,
+and reviewed, tested, and validated all code, taking full responsibility
+for the software.
+
+## License
+
+AGPL-3.
+
+# Package index
+
+## All functions
+
+- [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md)
+  : Coerce to a dea_data object
+- [`chinese_cities`](https://pomelo64.github.io/deaviz/reference/chinese_cities.md)
+  : Inputs and outputs of 35 major Chinese cities
+- [`compute_efficiency()`](https://pomelo64.github.io/deaviz/reference/compute_efficiency.md)
+  : Compute DEA efficiency scores
+- [`compute_multiplier_weights()`](https://pomelo64.github.io/deaviz/reference/compute_multiplier_weights.md)
+  : Compute DEA multiplier (weight) solutions
+- [`compute_som()`](https://pomelo64.github.io/deaviz/reference/compute_som.md)
+  : Fit a self-organizing map to a DEA problem
+- [`compute_cross_efficiency()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md)
+  [`compute_cross_efficiency_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md)
+  [`standardize_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md)
+  : Cross-efficiency and benevolent weights
+- [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md)
+  : Create a DEA data object
+- [`plot_cem_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_cem_heatmap.md)
+  : Heatmap of a cross-efficiency matrix
+- [`plot_cem_unfolding()`](https://pomelo64.github.io/deaviz/reference/plot_cem_unfolding.md)
+  : Unfolding map of a cross-efficiency matrix
+- [`plot_cem_weights_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_cem_weights_heatmap.md)
+  : Heatmap of secondary-goal multiplier weights
+- [`plot_efficiency_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_efficiency_distributions.md)
+  : Efficiency scores of the DMUs
+- [`plot_io_3dscatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dscatter.md)
+  : Interactive 3-D scatter plot of a DEA problem
+- [`plot_io_costa_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_costa_frontier.md)
+  : Costa bi-dimensional efficient frontier
+- [`plot_io_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_io_distributions.md)
+  : Distributions of inputs and outputs
+- [`plot_io_efficients()`](https://pomelo64.github.io/deaviz/reference/plot_io_efficients.md)
+  : Counts of efficient and inefficient DMUs
+- [`plot_io_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_frontier.md)
+  : DEA efficient frontier for a single input/output pair
+- [`plot_io_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_io_heatmap.md)
+  : Heatmap of standardised inputs and outputs
+- [`plot_io_lambda_network()`](https://pomelo64.github.io/deaviz/reference/plot_io_lambda_network.md)
+  : DEA reference (lambda) network
+- [`plot_io_mds()`](https://pomelo64.github.io/deaviz/reference/plot_io_mds.md)
+  : MDS co-plot of a DEA problem
+- [`plot_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_io_parcoo.md)
+  : Parallel coordinates plot of a DEA problem
+- [`plot_io_pca_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_io_pca_biplot.md)
+  : PCA biplot of a DEA problem
+- [`plot_io_peer_network()`](https://pomelo64.github.io/deaviz/reference/plot_io_peer_network.md)
+  : DEA peer (target) network
+- [`plot_io_radar()`](https://pomelo64.github.io/deaviz/reference/plot_io_radar.md)
+  : Radar plot of inputs and outputs
+- [`plot_io_scatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_scatter.md)
+  : Pairwise scatter plots of inputs, outputs and efficiency scores
+- [`plot_io_som()`](https://pomelo64.github.io/deaviz/reference/plot_io_som.md)
+  : Plot a self-organizing map of DEA efficiency
+- [`plot_io_som_components()`](https://pomelo64.github.io/deaviz/reference/plot_io_som_components.md)
+  : Plot the component planes of a DEA self-organizing map
+- [`plot_panel_io_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_biplot.md)
+  : Panel PCA biplot with DMU trajectories
+- [`plot_panel_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_parcoo.md)
+  : Parallel coordinates plot of a DEA panel over time
+- [`print(`*`<dea_data>`*`)`](https://pomelo64.github.io/deaviz/reference/print.dea_data.md)
+  : Print a DEA data object
+- [`print(`*`<dea_som>`*`)`](https://pomelo64.github.io/deaviz/reference/print.dea_som.md)
+  : Print a fitted DEA self-organizing map
+- [`taiwanese_banks`](https://pomelo64.github.io/deaviz/reference/taiwanese_banks.md)
+  : Inputs and outputs of 22 Taiwanese commercial banks, 2009-2011
+
+# Articles
+
+### All vignettes
+
+- [Getting started with
+  deaviz](https://pomelo64.github.io/deaviz/articles/deaviz.md):

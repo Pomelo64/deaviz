@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="231" viewBox="0 0 200 231">
+  <defs>
+    <!-- hexagon (pointy-top, standard R hex geometry) -->
+    <polygon id="hex" points="100,1 199,58.3 199,172.7 100,230 1,172.7 1,58.3"/>
+    <clipPath id="hexclip"><use href="#hex"/></clipPath>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#555555"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <use href="#hex" fill="#FFFFFF"/>
+
+  <g clip-path="url(#hexclip)">
+    <!-- production-possibility set: shaded right of the frontier -->
+    <path d="M 52 231 L 52 150 L 78 92 L 126 62 L 210 62 L 210 231 Z"
+          fill="#BF3EFF" fill-opacity="0.10" stroke="none"/>
+    <!-- piece-wise frontier -->
+    <path d="M 52 231 L 52 150 L 78 92 L 126 62 L 210 62"
+          fill="none" stroke="#E69F00" stroke-width="4.5"
+          stroke-linejoin="round" stroke-linecap="round"/>
+
+    <!-- peer arrows: focus DMU -> two efficient DMUs (lambda-weighted opacity) -->
+    <line x1="138" y1="140" x2="86"  y2="99"  stroke="#555555" stroke-width="2.4"
+          stroke-opacity="0.9" marker-end="url(#arrow)"/>
+    <line x1="138" y1="140" x2="128" y2="72"  stroke="#555555" stroke-width="2.4"
+          stroke-opacity="0.5" marker-end="url(#arrow)"/>
+
+    <!-- efficient DMUs on the frontier (viridis top) -->
+    <circle cx="78"  cy="92" r="7" fill="#FDE333" stroke="#222222" stroke-width="1"/>
+    <circle cx="126" cy="62" r="7" fill="#FDE333" stroke="#222222" stroke-width="1"/>
+
+    <!-- faded inefficient DMUs -->
+    <circle cx="95"  cy="177" r="6.5" fill="#46085C" fill-opacity="0.22"/>
+    <circle cx="167" cy="103" r="6.5" fill="#46085C" fill-opacity="0.22"/>
+
+    <!-- the focused inefficient DMU: full colour + the package focus ring -->
+    <circle cx="138" cy="140" r="7" fill="#007996"/>
+    <circle cx="138" cy="140" r="11.5" fill="none" stroke="#BF3EFF" stroke-width="2.5"/>
+
+    <!-- wordmark -->
+    <text x="100" y="203" text-anchor="middle"
+          font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+          font-size="27" fill="#222222">deaviz</text>
+  </g>
+
+  <!-- hexagon border on top -->
+  <use href="#hex" fill="none" stroke="#E69F00" stroke-width="6"/>
+</svg>
