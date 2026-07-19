@@ -34,7 +34,10 @@ plot_panel_io_parcoo(
 
 - panel_data:
 
-  A data frame in long format: one row per DMU-period.
+  A data frame in long format (one row per DMU-period), or a
+  [`dea_panel_data`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md)
+  object – in which case `inputs`, `outputs`, `id` and `period` are
+  taken from the object and those arguments are ignored.
 
 - y:
 
@@ -136,6 +139,10 @@ the axes share the variable's natural scale.
 ## Examples
 
 ``` r
+pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+                     id = "DMU", period = "Year")
+plot_panel_io_parcoo(pd, y = "vrs")
+
 # per-period VRS efficiency of every bank over 2009-2011
 plot_panel_io_parcoo(
   taiwanese_banks, y = "vrs", id = "DMU", period = "Year",

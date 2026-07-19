@@ -95,7 +95,7 @@ then recognises them automatically.
 
 | Area | Functions |
 |----|----|
-| Data object | [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md), [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md) |
+| Data object | [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md), [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md) , [`dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md), [`as_dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_panel_data.md) |
 | Efficiency analysis | [`compute_efficiency()`](https://pomelo64.github.io/deaviz/reference/compute_efficiency.md), [`compute_multiplier_weights()`](https://pomelo64.github.io/deaviz/reference/compute_multiplier_weights.md) |
 | Cross-efficiency analysis | [`compute_cross_efficiency()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md), [`compute_cross_efficiency_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md), [`standardize_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md) |
 | SOM analysis | [`compute_som()`](https://pomelo64.github.io/deaviz/reference/compute_som.md) |

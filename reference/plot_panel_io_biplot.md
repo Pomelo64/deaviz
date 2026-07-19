@@ -36,9 +36,10 @@ plot_panel_io_biplot(
 
 - panel_data:
 
-  A long-format data frame with one row per DMU-period, containing an
-  identifier column and a period column (see `id` and `period`); the
-  remaining columns are inputs/outputs.
+  A data frame in long format (one row per DMU-period), or a
+  [`dea_panel_data`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md)
+  object – in which case `inputs`, `outputs`, `id` and `period` are
+  taken from the object and those arguments are ignored.
 
 - inputs, outputs:
 
@@ -136,6 +137,10 @@ A ggplot2 object, or a plotly object when `interactive = TRUE`.
 ``` r
 # Real multi-period example: 22 Taiwanese banks over 2009-2011.
 # Columns can be given by position (inputs are columns 3-5, outputs 6-8) ...
+pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+                     id = "DMU", period = "Year")
+plot_panel_io_biplot(pd, labels = "Cathay")
+
 plot_panel_io_biplot(
   taiwanese_banks, id = "DMU", period = "Year",
   inputs = 3:5, outputs = 6:8, labels = "Cathay"

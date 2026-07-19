@@ -95,7 +95,7 @@ then recognises them automatically.
 
 | Area | Functions |
 |----|----|
-| Data object | [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md), [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md) |
+| Data object | [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md), [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md) , [`dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md), [`as_dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_panel_data.md) |
 | Efficiency analysis | [`compute_efficiency()`](https://pomelo64.github.io/deaviz/reference/compute_efficiency.md), [`compute_multiplier_weights()`](https://pomelo64.github.io/deaviz/reference/compute_multiplier_weights.md) |
 | Cross-efficiency analysis | [`compute_cross_efficiency()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md), [`compute_cross_efficiency_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md), [`standardize_weights()`](https://pomelo64.github.io/deaviz/reference/cross-efficiency.md) |
 | SOM analysis | [`compute_som()`](https://pomelo64.github.io/deaviz/reference/compute_som.md) |
@@ -137,6 +137,8 @@ AGPL-3.
 
 - [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md)
   : Coerce to a dea_data object
+- [`as_dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_panel_data.md)
+  : Coerce to a DEA panel-data object
 - [`chinese_cities`](https://pomelo64.github.io/deaviz/reference/chinese_cities.md)
   : Inputs and outputs of 35 major Chinese cities
 - [`compute_efficiency()`](https://pomelo64.github.io/deaviz/reference/compute_efficiency.md)
@@ -151,6 +153,8 @@ AGPL-3.
   : Cross-efficiency and benevolent weights
 - [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md)
   : Create a DEA data object
+- [`dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md)
+  : Construct a validated DEA panel-data object
 - [`plot_cem_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_cem_heatmap.md)
   : Heatmap of a cross-efficiency matrix
 - [`plot_cem_unfolding()`](https://pomelo64.github.io/deaviz/reference/plot_cem_unfolding.md)

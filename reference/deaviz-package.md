@@ -55,6 +55,8 @@ Useful links:
 
 - <https://github.com/Pomelo64/deaviz>
 
+- <https://pomelo64.github.io/deaviz/>
+
 - Report bugs at <https://github.com/Pomelo64/deaviz/issues>
 
 ## Author

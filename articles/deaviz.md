@@ -432,6 +432,24 @@ labels stay legible.
 
 It is noteworthy that the PCA is computed over the pooled data.
 
+For panel work it pays to build a
+[`dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md)
+object once – it validates the panel (unique DMU-period rows,
+balancedness) and remembers which columns are the id, the period, and
+the inputs/outputs, so the `plot_panel_*` functions can be called
+without repeating them:
+
+``` r
+
+pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+                     id = "DMU", period = "Year")
+pd
+#> A DEA panel: 22 DMUs x 3 periods (balanced) 
+#>   periods: 2009, 2010, 2011 
+#>   inputs:  labour, physical_capital, purchased_funds 
+#>   outputs: demand_deposits, short_term_loans, long_term_loans
+```
+
 [`plot_panel_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_parcoo.md)
 offers a simpler view of the same panel: the periods form the parallel
 axes and each DMU is one line, tracing either a single input/output
@@ -440,10 +458,7 @@ solved as its own DEA problem).
 
 ``` r
 
-plot_panel_io_parcoo(
-  taiwanese_banks, y = "vrs", id = "DMU", period = "Year",
-  inputs = 3:5, outputs = 6:8, labels = "Cathay"
-)
+plot_panel_io_parcoo(pd, y = "vrs", labels = "Cathay")
 ```
 
 ![](deaviz_files/figure-html/panel-parcoo-1.png)
@@ -454,10 +469,7 @@ stand out.
 
 ``` r
 
-plot_panel_io_parcoo(
-  taiwanese_banks, y = "demand_deposits", id = "DMU", period = "Year",
-  color_by_trend = TRUE
-)
+plot_panel_io_parcoo(pd, y = "demand_deposits", color_by_trend = TRUE)
 ```
 
 ![](deaviz_files/figure-html/panel-parcoo-trend-1.png)

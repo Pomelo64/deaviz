@@ -4,6 +4,8 @@
 
 - [`as_dea_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_data.md)
   : Coerce to a dea_data object
+- [`as_dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_panel_data.md)
+  : Coerce to a DEA panel-data object
 - [`chinese_cities`](https://pomelo64.github.io/deaviz/reference/chinese_cities.md)
   : Inputs and outputs of 35 major Chinese cities
 - [`compute_efficiency()`](https://pomelo64.github.io/deaviz/reference/compute_efficiency.md)
@@ -18,6 +20,8 @@
   : Cross-efficiency and benevolent weights
 - [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md)
   : Create a DEA data object
+- [`dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md)
+  : Construct a validated DEA panel-data object
 - [`plot_cem_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_cem_heatmap.md)
   : Heatmap of a cross-efficiency matrix
 - [`plot_cem_unfolding()`](https://pomelo64.github.io/deaviz/reference/plot_cem_unfolding.md)

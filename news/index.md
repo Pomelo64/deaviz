@@ -3,6 +3,20 @@
 ## deaviz 0.2.0
 
 - New
+  [`dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/dea_panel_data.md)
+  (with
+  [`as_dea_panel_data()`](https://pomelo64.github.io/deaviz/reference/as_dea_panel_data.md)
+  and a [`print()`](https://rdrr.io/r/base/print.html) method): the
+  panel counterpart of
+  [`dea_data()`](https://pomelo64.github.io/deaviz/reference/dea_data.md).
+  It validates the panel once and stores the column mapping, so
+  [`plot_panel_io_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_biplot.md)
+  and
+  [`plot_panel_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_parcoo.md)
+  can be called on the object without repeating
+  `inputs`/`outputs`/`id`/`period`.
+
+- New
   [`plot_panel_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_parcoo.md):
   traces a chosen input/output or the per-period efficiency of every DMU
   across time, with the periods as parallel axes; `color_by_trend`

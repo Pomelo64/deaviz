@@ -361,25 +361,32 @@ Liu, 2014). Inputs and outputs can be given by position.</p>
 other banks recede, and the loading vectors are spread apart so their
 labels stay legible.</p>
 <p>It is noteworthy that the PCA is computed over the pooled data.</p>
+<p>For panel work it pays to build a <code><a href="../reference/dea_panel_data.html">dea_panel_data()</a></code>
+object once – it validates the panel (unique DMU-period rows,
+balancedness) and remembers which columns are the id, the period, and
+the inputs/outputs, so the <code>plot_panel_*</code> functions can be
+called without repeating them:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dea_panel_data.html">dea_panel_data</a></span><span class="op">(</span><span class="va">taiwanese_banks</span>, inputs <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, outputs <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>,</span>
+<span>                     id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span></span>
+<span><span class="va">pd</span></span>
+<span><span class="co">#&gt; A DEA panel: 22 DMUs x 3 periods (balanced) </span></span>
+<span><span class="co">#&gt;   periods: 2009, 2010, 2011 </span></span>
+<span><span class="co">#&gt;   inputs:  labour, physical_capital, purchased_funds </span></span>
+<span><span class="co">#&gt;   outputs: demand_deposits, short_term_loans, long_term_loans</span></span></code></pre></div>
 <p><code><a href="../reference/plot_panel_io_parcoo.html">plot_panel_io_parcoo()</a></code> offers a simpler view of the same
 panel: the periods form the parallel axes and each DMU is one line,
 tracing either a single input/output variable or the per-period
 efficiency score (each period’s cross-section solved as its own DEA
 problem).</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_panel_io_parcoo.html">plot_panel_io_parcoo</a></span><span class="op">(</span></span>
-<span>  <span class="va">taiwanese_banks</span>, y <span class="op">=</span> <span class="st">"vrs"</span>, id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span>,</span>
-<span>  inputs <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, outputs <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, labels <span class="op">=</span> <span class="st">"Cathay"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_panel_io_parcoo.html">plot_panel_io_parcoo</a></span><span class="op">(</span><span class="va">pd</span>, y <span class="op">=</span> <span class="st">"vrs"</span>, labels <span class="op">=</span> <span class="st">"Cathay"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="deaviz_files/figure-html/panel-parcoo-1.png" class="r-plt" alt="" width="85%" style="display: block; margin: auto;"></p>
 <p>With <code>color_by_trend = TRUE</code> each line is coloured by the
 DMU’s overall change (last period minus first), so the biggest risers
 and fallers stand out.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_panel_io_parcoo.html">plot_panel_io_parcoo</a></span><span class="op">(</span></span>
-<span>  <span class="va">taiwanese_banks</span>, y <span class="op">=</span> <span class="st">"demand_deposits"</span>, id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span>,</span>
-<span>  color_by_trend <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_panel_io_parcoo.html">plot_panel_io_parcoo</a></span><span class="op">(</span><span class="va">pd</span>, y <span class="op">=</span> <span class="st">"demand_deposits"</span>, color_by_trend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="deaviz_files/figure-html/panel-parcoo-trend-1.png" class="r-plt" alt="" width="85%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -389,7 +396,7 @@ and fallers stand out.</p>
 <code>plotly</code> widget with hover tooltips instead of a static
 <code>ggplot</code>. This needs the <code>plotly</code> package and is
 best viewed in an HTML context:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_io_pca_biplot.html">plot_io_pca_biplot</a></span><span class="op">(</span><span class="va">d</span>, rts <span class="op">=</span> <span class="st">"vrs"</span>, labels <span class="op">=</span> <span class="st">"Beijing"</span>, interactive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -452,7 +459,7 @@ see <code>citation("deaviz")</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -74,7 +74,10 @@ input/output variable (raw values) or the per-period DEA efficiency score.</p>
 
 
 <dl><dt id="arg-panel-data">panel_data<a class="anchor" aria-label="anchor" href="#arg-panel-data"></a></dt>
-<dd><p>A data frame in long format: one row per DMU-period.</p></dd>
+<dd><p>A data frame in long format (one row per DMU-period), or
+a <code><a href="dea_panel_data.html">dea_panel_data</a></code> object – in which case <code>inputs</code>,
+<code>outputs</code>, <code>id</code> and <code>period</code> are taken from the object
+and those arguments are ignored.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
@@ -178,30 +181,34 @@ variable's natural scale.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># per-period VRS efficiency of every bank over 2009-2011</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="dea_panel_data.html">dea_panel_data</a></span><span class="op">(</span><span class="va">taiwanese_banks</span>, inputs <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, outputs <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>,</span></span>
+<span class="r-in"><span>                     id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_panel_io_parcoo</span><span class="op">(</span><span class="va">pd</span>, y <span class="op">=</span> <span class="st">"vrs"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plot_panel_io_parcoo-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># per-period VRS efficiency of every bank over 2009-2011</span></span></span>
 <span class="r-in"><span><span class="fu">plot_panel_io_parcoo</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">taiwanese_banks</span>, y <span class="op">=</span> <span class="st">"vrs"</span>, id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span>,</span></span>
 <span class="r-in"><span>  inputs <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, outputs <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_panel_io_parcoo-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot_panel_io_parcoo-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># colour lines by each bank's overall change in efficiency</span></span></span>
 <span class="r-in"><span><span class="fu">plot_panel_io_parcoo</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">taiwanese_banks</span>, y <span class="op">=</span> <span class="st">"vrs"</span>, id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span>,</span></span>
 <span class="r-in"><span>  inputs <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, outputs <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, color_by_trend <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_panel_io_parcoo-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot_panel_io_parcoo-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># the same, on a diverging scale anchored at zero</span></span></span>
 <span class="r-in"><span><span class="fu">plot_panel_io_parcoo</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">taiwanese_banks</span>, y <span class="op">=</span> <span class="st">"vrs"</span>, id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span>,</span></span>
 <span class="r-in"><span>  inputs <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, outputs <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, color_by_trend <span class="op">=</span> <span class="st">"diverging"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_panel_io_parcoo-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot_panel_io_parcoo-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># one raw variable over time, focusing a single bank</span></span></span>
 <span class="r-in"><span><span class="fu">plot_panel_io_parcoo</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">taiwanese_banks</span>, y <span class="op">=</span> <span class="st">"demand_deposits"</span>, id <span class="op">=</span> <span class="st">"DMU"</span>, period <span class="op">=</span> <span class="st">"Year"</span>,</span></span>
 <span class="r-in"><span>  labels <span class="op">=</span> <span class="st">"Cathay"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot_panel_io_parcoo-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot_panel_io_parcoo-5.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -213,7 +220,7 @@ variable's natural scale.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>
