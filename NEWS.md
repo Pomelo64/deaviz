@@ -1,5 +1,10 @@
 # deaviz 0.2.0
 
+* New `dea_panel_data()` (with `as_dea_panel_data()` and a `print()` method):
+  the panel counterpart of `dea_data()`. It validates the panel once and stores
+  the column mapping, so `plot_panel_io_biplot()` and `plot_panel_io_parcoo()`
+  can be called on the object without repeating `inputs`/`outputs`/`id`/`period`.
+
 * New `plot_panel_io_parcoo()`: traces a chosen input/output or the per-period
   efficiency of every DMU across time, with the periods as parallel axes;
   `color_by_trend` colours each line by the DMU's overall change (viridis, or a

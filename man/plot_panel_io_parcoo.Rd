@@ -25,7 +25,10 @@ plot_panel_io_parcoo(
 )
 }
 \arguments{
-\item{panel_data}{A data frame in long format: one row per DMU-period.}
+\item{panel_data}{A data frame in long format (one row per DMU-period), or
+a \code{\link{dea_panel_data}} object -- in which case \code{inputs},
+\code{outputs}, \code{id} and \code{period} are taken from the object
+and those arguments are ignored.}
 
 \item{y}{What to trace over time: \code{"crs"} or \code{"vrs"} for the
 per-period efficiency score, or the name or integer position of a single
@@ -98,6 +101,9 @@ variable's natural scale.
 }
 \examples{
 \dontshow{if (requireNamespace("Benchmarking", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+                     id = "DMU", period = "Year")
+plot_panel_io_parcoo(pd, y = "vrs")
 # per-period VRS efficiency of every bank over 2009-2011
 plot_panel_io_parcoo(
   taiwanese_banks, y = "vrs", id = "DMU", period = "Year",

@@ -91,7 +91,7 @@ automatically.
 
 | Area | Functions |
 |------|-----------|
-| Data object | `dea_data()`, `as_dea_data()` |
+| Data object | `dea_data()`, `as_dea_data()` , `dea_panel_data()`, `as_dea_panel_data()`|
 | Efficiency analysis | `compute_efficiency()`, `compute_multiplier_weights()` |
 | Cross-efficiency analysis | `compute_cross_efficiency()`, `compute_cross_efficiency_weights()`, `standardize_weights()` |
 | SOM analysis | `compute_som()` |

@@ -6,9 +6,11 @@
 #' connected trajectory. Points are coloured by a DEA efficiency score and the
 #' arrow on each trajectory points from the earliest to the latest period.
 #'
-#' @param panel_data A long-format data frame with one row per DMU-period,
-#'   containing an identifier column and a period column (see \code{id} and
-#'   \code{period}); the remaining columns are inputs/outputs.
+#' @param panel_data A data frame in long format (one row per DMU-period), or
+#'   a \code{\link{dea_panel_data}} object -- in which case \code{inputs},
+#'   \code{outputs}, \code{id} and \code{period} are taken from the object
+#'   and those arguments are ignored.
+
 #' @param inputs,outputs Optional input/output column selectors, given either as
 #'   character names or as integer column positions (e.g. \code{inputs = 3:5}).
 #'   If \code{NULL} (default), columns are recognised by the \code{i_} and
@@ -58,6 +60,9 @@
 #' @examplesIf requireNamespace("Benchmarking", quietly = TRUE)
 #' # Real multi-period example: 22 Taiwanese banks over 2009-2011.
 #' # Columns can be given by position (inputs are columns 3-5, outputs 6-8) ...
+#' pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+#'                      id = "DMU", period = "Year")
+#' plot_panel_io_biplot(pd, labels = "Cathay")
 #' plot_panel_io_biplot(
 #'   taiwanese_banks, id = "DMU", period = "Year",
 #'   inputs = 3:5, outputs = 6:8, labels = "Cathay"
@@ -116,6 +121,13 @@ plot_panel_io_biplot <- function(panel_data, inputs = NULL, outputs = NULL,
     stop("`max.overlaps.value` must be a single positive number.",
          call. = FALSE)
 
+  if (inherits(panel_data, "dea_panel_data")) {
+    id      <- panel_data$id
+    period  <- panel_data$period
+    inputs  <- panel_data$inputs
+    outputs <- panel_data$outputs
+    panel_data <- panel_data$data
+  }
   if (!is.data.frame(panel_data))
     stop("`panel_data` must be a data frame in long format.", call. = FALSE)
   if (!is.numeric(vector_size) || length(vector_size) != 1L || vector_size <= 0)

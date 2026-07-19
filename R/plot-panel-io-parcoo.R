@@ -11,7 +11,11 @@
 #' input or output column, its raw values are plotted, so the axes share the
 #' variable's natural scale.
 #'
-#' @param panel_data A data frame in long format: one row per DMU-period.
+#' @param panel_data A data frame in long format (one row per DMU-period), or
+#'   a \code{\link{dea_panel_data}} object -- in which case \code{inputs},
+#'   \code{outputs}, \code{id} and \code{period} are taken from the object
+#'   and those arguments are ignored.
+
 #' @param y What to trace over time: \code{"crs"} or \code{"vrs"} for the
 #'   per-period efficiency score, or the name or integer position of a single
 #'   input/output column in \code{panel_data}. (If a data column is literally
@@ -60,6 +64,9 @@
 #'
 #' @importFrom rlang .data
 #' @examplesIf requireNamespace("Benchmarking", quietly = TRUE)
+#' pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+#'                      id = "DMU", period = "Year")
+#' plot_panel_io_parcoo(pd, y = "vrs")
 #' # per-period VRS efficiency of every bank over 2009-2011
 #' plot_panel_io_parcoo(
 #'   taiwanese_banks, y = "vrs", id = "DMU", period = "Year",
@@ -98,6 +105,13 @@ plot_panel_io_parcoo <- function(panel_data, y, inputs = NULL, outputs = NULL,
          call. = FALSE)
   flev <- .deaviz_fade_level(fade, transparency)
   
+  if (inherits(panel_data, "dea_panel_data")) {
+    id      <- panel_data$id
+    period  <- panel_data$period
+    inputs  <- panel_data$inputs
+    outputs <- panel_data$outputs
+    panel_data <- panel_data$data
+  }
   if (!is.data.frame(panel_data))
     stop("`panel_data` must be a data frame in long format.", call. = FALSE)
   if (missing(y))
@@ -191,10 +205,10 @@ plot_panel_io_parcoo <- function(panel_data, y, inputs = NULL, outputs = NULL,
           mid = .deaviz_diverging()[["mid"]],
           high = .deaviz_diverging()[["high"]], midpoint = 0,
           name = "Change\n(last - first)")
-       else
-         ggplot2::scale_colour_gradientn(
-           colours = .deaviz_sequential(),
-           name = "Change\n(last - first)"))
+      else
+        ggplot2::scale_colour_gradientn(
+          colours = .deaviz_sequential(),
+          name = "Change\n(last - first)"))
   } else {
     g <- g + ggplot2::geom_line(
       .deaviz_aes(ggplot2::aes(alpha = .data$.fa,

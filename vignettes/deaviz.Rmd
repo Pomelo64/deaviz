@@ -330,26 +330,31 @@ recede, and the loading vectors are spread apart so their labels stay legible.
 
 It is noteworthy that the PCA is computed over the pooled data. 
 
+For panel work it pays to build a `dea_panel_data()` object once -- it
+validates the panel (unique DMU-period rows, balancedness) and remembers which
+columns are the id, the period, and the inputs/outputs, so the `plot_panel_*`
+functions can be called without repeating them:
+
+```{r panel-data-object, eval = has_bench}
+pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+                     id = "DMU", period = "Year")
+pd
+```
+
 `plot_panel_io_parcoo()` offers a simpler view of the same panel: the periods
 form the parallel axes and each DMU is one line, tracing either a single
 input/output variable or the per-period efficiency score (each period's
 cross-section solved as its own DEA problem).
 
 ```{r panel-parcoo, eval = has_bench, fig.height = 4.6}
-plot_panel_io_parcoo(
-  taiwanese_banks, y = "vrs", id = "DMU", period = "Year",
-  inputs = 3:5, outputs = 6:8, labels = "Cathay"
-)
+plot_panel_io_parcoo(pd, y = "vrs", labels = "Cathay")
 ```
 
 With `color_by_trend = TRUE` each line is coloured by the DMU's overall change
 (last period minus first), so the biggest risers and fallers stand out.
 
 ```{r panel-parcoo-trend, eval = has_bench, fig.height = 4.6}
-plot_panel_io_parcoo(
-  taiwanese_banks, y = "demand_deposits", id = "DMU", period = "Year",
-  color_by_trend = TRUE
-)
+plot_panel_io_parcoo(pd, y = "demand_deposits", color_by_trend = TRUE)
 ```
 
 ## Interactive plots

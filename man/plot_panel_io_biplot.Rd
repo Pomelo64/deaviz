@@ -26,9 +26,10 @@ plot_panel_io_biplot(
 )
 }
 \arguments{
-\item{panel_data}{A long-format data frame with one row per DMU-period,
-containing an identifier column and a period column (see \code{id} and
-\code{period}); the remaining columns are inputs/outputs.}
+\item{panel_data}{A data frame in long format (one row per DMU-period), or
+a \code{\link{dea_panel_data}} object -- in which case \code{inputs},
+\code{outputs}, \code{id} and \code{period} are taken from the object
+and those arguments are ignored.}
 
 \item{inputs, outputs}{Optional input/output column selectors, given either as
 character names or as integer column positions (e.g. \code{inputs = 3:5}).
@@ -99,6 +100,9 @@ arrow on each trajectory points from the earliest to the latest period.
 \dontshow{if (requireNamespace("Benchmarking", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Real multi-period example: 22 Taiwanese banks over 2009-2011.
 # Columns can be given by position (inputs are columns 3-5, outputs 6-8) ...
+pd <- dea_panel_data(taiwanese_banks, inputs = 3:5, outputs = 6:8,
+                     id = "DMU", period = "Year")
+plot_panel_io_biplot(pd, labels = "Cathay")
 plot_panel_io_biplot(
   taiwanese_banks, id = "DMU", period = "Year",
   inputs = 3:5, outputs = 6:8, labels = "Cathay"
