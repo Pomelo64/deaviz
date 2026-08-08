@@ -1,3 +1,18 @@
+# deaviz 0.3.0
+
+* New `plot_io_3dfrontier()`: the three-dimensional counterpart of
+  `plot_io_frontier()`. For two chosen inputs and one output it draws the
+  units in three dimensions together with the efficient frontier as a
+  semi-transparent piecewise-linear surface (`crs` or `vrs`), colours the
+  units by their efficiency in that three-variable sub-model, and can overlay
+  lambda-weighted peer arrows. The plot is interactive and requires `plotly`
+  and `geometry`.
+
+* Added a test suite validating the two- and three-dimensional frontier
+  geometry against the `Benchmarking` solver: efficient units must lie on the
+  drawn frontier, no unit may lie above it, and each unit's radial projection
+  must land on it.
+
 # deaviz 0.2.0
 
 * New `dea_panel_data()` (with `as_dea_panel_data()` and a `print()` method):

@@ -97,7 +97,7 @@ automatically.
 | SOM analysis | `compute_som()` |
 | Descriptive (inputs/outputs) | `plot_io_distributions()`, `plot_io_scatter()`, `plot_io_heatmap()`, `plot_io_parcoo()`, `plot_io_radar()` |
 | Efficiency plots | `plot_efficiency_distributions()`, `plot_io_efficients()` |
-| Projections & frontier | `plot_io_pca_biplot()`, `plot_io_mds()`, `plot_io_costa_frontier()`, `plot_io_frontier()`, `plot_io_3dscatter()` |
+| Projections & frontier | `plot_io_pca_biplot()`, `plot_io_mds()`, `plot_io_costa_frontier()`, `plot_io_frontier()`, `plot_io_3dfrontier()`, `plot_io_3dscatter()` |
 | Reference networks | `plot_io_lambda_network()`, `plot_io_peer_network()` |
 | Panel data | `plot_panel_io_biplot()`, `plot_panel_io_parcoo()` |
 | Self-organizing maps | `plot_io_som()`, `plot_io_som_components()` |

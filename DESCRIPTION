@@ -1,7 +1,7 @@
 Package: deaviz
 Type: Package
 Title: Visualization of Data Envelopment Analysis Problems
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: person("Shahin", "Ashkiani", role = c("aut", "cre"),
                   email = "contact@Shahin-Ashkiani.com")
 Description: High-dimensional visualization methods for data envelopment
@@ -44,6 +44,7 @@ Suggests:
     ggrepel,
     igraph,
     graphlayouts,
+    geometry,
     MASS,
     testthat (>= 3.0.0),
     knitr,
@@ -51,3 +52,5 @@ Suggests:
 Roxygen: list(markdown = FALSE)
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.0.0
+Config/testthat/edition: 3
+RoxygenNote: 7.3.1
