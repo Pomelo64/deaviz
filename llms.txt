@@ -101,7 +101,7 @@ then recognises them automatically.
 | SOM analysis | [`compute_som()`](https://pomelo64.github.io/deaviz/reference/compute_som.md) |
 | Descriptive (inputs/outputs) | [`plot_io_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_io_distributions.md), [`plot_io_scatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_scatter.md), [`plot_io_heatmap()`](https://pomelo64.github.io/deaviz/reference/plot_io_heatmap.md), [`plot_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_io_parcoo.md), [`plot_io_radar()`](https://pomelo64.github.io/deaviz/reference/plot_io_radar.md) |
 | Efficiency plots | [`plot_efficiency_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_efficiency_distributions.md), [`plot_io_efficients()`](https://pomelo64.github.io/deaviz/reference/plot_io_efficients.md) |
-| Projections & frontier | [`plot_io_pca_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_io_pca_biplot.md), [`plot_io_mds()`](https://pomelo64.github.io/deaviz/reference/plot_io_mds.md), [`plot_io_costa_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_costa_frontier.md), [`plot_io_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_frontier.md), [`plot_io_3dscatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dscatter.md) |
+| Projections & frontier | [`plot_io_pca_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_io_pca_biplot.md), [`plot_io_mds()`](https://pomelo64.github.io/deaviz/reference/plot_io_mds.md), [`plot_io_costa_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_costa_frontier.md), [`plot_io_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_frontier.md), [`plot_io_3dfrontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dfrontier.md), [`plot_io_3dscatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dscatter.md) |
 | Reference networks | [`plot_io_lambda_network()`](https://pomelo64.github.io/deaviz/reference/plot_io_lambda_network.md), [`plot_io_peer_network()`](https://pomelo64.github.io/deaviz/reference/plot_io_peer_network.md) |
 | Panel data | [`plot_panel_io_biplot()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_biplot.md), [`plot_panel_io_parcoo()`](https://pomelo64.github.io/deaviz/reference/plot_panel_io_parcoo.md) |
 | Self-organizing maps | [`plot_io_som()`](https://pomelo64.github.io/deaviz/reference/plot_io_som.md), [`plot_io_som_components()`](https://pomelo64.github.io/deaviz/reference/plot_io_som_components.md) |
@@ -163,6 +163,8 @@ AGPL-3.
   : Heatmap of secondary-goal multiplier weights
 - [`plot_efficiency_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_efficiency_distributions.md)
   : Efficiency scores of the DMUs
+- [`plot_io_3dfrontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dfrontier.md)
+  : Three-dimensional DEA frontier surface for two inputs and one output
 - [`plot_io_3dscatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dscatter.md)
   : Interactive 3-D scatter plot of a DEA problem
 - [`plot_io_costa_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_costa_frontier.md)

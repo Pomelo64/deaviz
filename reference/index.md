@@ -30,6 +30,8 @@
   : Heatmap of secondary-goal multiplier weights
 - [`plot_efficiency_distributions()`](https://pomelo64.github.io/deaviz/reference/plot_efficiency_distributions.md)
   : Efficiency scores of the DMUs
+- [`plot_io_3dfrontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dfrontier.md)
+  : Three-dimensional DEA frontier surface for two inputs and one output
 - [`plot_io_3dscatter()`](https://pomelo64.github.io/deaviz/reference/plot_io_3dscatter.md)
   : Interactive 3-D scatter plot of a DEA problem
 - [`plot_io_costa_frontier()`](https://pomelo64.github.io/deaviz/reference/plot_io_costa_frontier.md)

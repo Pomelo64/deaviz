@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">deaviz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,11 @@
       <small>Source: <a href="https://github.com/Pomelo64/deaviz/blob/develop/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="deaviz-030">deaviz 0.3.0<a class="anchor" aria-label="anchor" href="#deaviz-030"></a></h2>
+<ul><li><p>New <code><a href="../reference/plot_io_3dfrontier.html">plot_io_3dfrontier()</a></code>: the three-dimensional counterpart of <code><a href="../reference/plot_io_frontier.html">plot_io_frontier()</a></code>. For two chosen inputs and one output it draws the units in three dimensions together with the efficient frontier as a semi-transparent piecewise-linear surface (<code>crs</code> or <code>vrs</code>), colours the units by their efficiency in that three-variable sub-model, and can overlay lambda-weighted peer arrows. The plot is interactive and requires <code>plotly</code> and <code>geometry</code>.</p></li>
+<li><p>Added a test suite validating the two- and three-dimensional frontier geometry against the <code>Benchmarking</code> solver: efficient units must lie on the drawn frontier, no unit may lie above it, and each unit’s radial projection must land on it.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="deaviz-020">deaviz 0.2.0<a class="anchor" aria-label="anchor" href="#deaviz-020"></a></h2>
 <ul><li><p>New <code><a href="../reference/dea_panel_data.html">dea_panel_data()</a></code> (with <code><a href="../reference/as_dea_panel_data.html">as_dea_panel_data()</a></code> and a <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method): the panel counterpart of <code><a href="../reference/dea_data.html">dea_data()</a></code>. It validates the panel once and stores the column mapping, so <code><a href="../reference/plot_panel_io_biplot.html">plot_panel_io_biplot()</a></code> and <code><a href="../reference/plot_panel_io_parcoo.html">plot_panel_io_parcoo()</a></code> can be called on the object without repeating <code>inputs</code>/<code>outputs</code>/<code>id</code>/<code>period</code>.</p></li>
